@@ -1,1230 +1,443 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KODAROS — Tecnologia, Software e Educação</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-:root {
-  --black: #000000;
-  --white: #FFFFFF;
-  --gray-950: #0F0F0F;
-  --gray-900: #1A1A1A;
-  --gray-800: #2B2B2B;
-  --gray-500: #6B6B6B;
-  --gray-400: #A0A0A0;
-  --gray-100: #F5F5F5;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--black);
-  color: var(--white);
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ANIMATIONS */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
-}
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.7; }
-}
-@keyframes orbit {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* NAVBAR */
-.navbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 1000;
-  padding: 0 48px;
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: background 0.5s ease, backdrop-filter 0.5s ease, box-shadow 0.5s ease;
-}
-.navbar.scrolled {
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.05);
-}
-
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-}
-.nav-logo img {
-  height: 28px;
-  width: auto;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 36px;
-  list-style: none;
-}
-.nav-links a {
-  color: var(--gray-400);
-  text-decoration: none;
-  font-size: 13.5px;
-  font-weight: 300;
-  letter-spacing: 0.02em;
-  position: relative;
-  padding: 4px 0;
-  transition: color 0.35s ease;
-}
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0;
-  width: 0; height: 1px;
-  background: var(--white);
-  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.nav-links a:hover { color: var(--white); }
-.nav-links a:hover::after { width: 100%; }
-
-.nav-cta {
-  padding: 10px 24px;
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 100px;
-  color: var(--white);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 300;
-  letter-spacing: 0.02em;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  background: transparent;
-}
-.nav-cta:hover {
-  background: var(--white);
-  color: var(--black);
-  border-color: var(--white);
-}
-
-.mobile-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  padding: 8px;
-}
-.mobile-toggle span {
-  display: block;
-  width: 22px;
-  height: 1px;
-  background: var(--white);
-  transition: all 0.3s ease;
-}
-
-/* HERO */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: 120px 48px 80px;
-  position: relative;
-  overflow: hidden;
-}
-.hero-inner {
-  max-width: 1400px;
-  margin: 0 auto;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-}
-
-.hero-label {
-  font-size: 12px;
-  font-weight: 300;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-bottom: 28px;
-  animation: fadeInUp 1s 0.2s both;
-}
-.hero-label span { color: var(--gray-400); }
-
-.hero h1 {
-  font-size: clamp(36px, 4.5vw, 64px);
-  font-weight: 200;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  margin-bottom: 28px;
-  animation: fadeInUp 1s 0.4s both;
-}
-
-.hero-subtitle {
-  font-size: 17px;
-  font-weight: 300;
-  line-height: 1.7;
-  color: var(--gray-400);
-  max-width: 480px;
-  margin-bottom: 48px;
-  animation: fadeInUp 1s 0.6s both;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 16px;
-  animation: fadeInUp 1s 0.8s both;
-}
-
-.btn-primary {
-  padding: 14px 32px;
-  background: var(--white);
-  color: var(--black);
-  border-radius: 100px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid var(--white);
-}
-.btn-primary:hover {
-  background: transparent;
-  color: var(--white);
-  transform: translateY(-2px);
-}
-
-.btn-secondary {
-  padding: 14px 32px;
-  background: transparent;
-  color: var(--white);
-  border-radius: 100px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 300;
-  letter-spacing: 0.01em;
-  border: 1px solid rgba(255,255,255,0.15);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.btn-secondary:hover {
-  border-color: rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.03);
-  transform: translateY(-2px);
-}
-
-.hero-visual {
-  position: relative;
-  height: 520px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 1.5s 0.5s both;
-}
-.hero-visual svg {
-  width: 100%;
-  height: 100%;
-}
-
-/* SECTIONS COMMON */
-section {
-  padding: 140px 48px;
-}
-.section-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.section-label {
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-bottom: 20px;
-}
-.section-title {
-  font-size: clamp(28px, 3.2vw, 42px);
-  font-weight: 200;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  margin-bottom: 24px;
-}
-.section-desc {
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 1.7;
-  color: var(--gray-400);
-  max-width: 600px;
-}
-
-/* ABOUT */
-.about {
-  background: var(--gray-950);
-}
-.about-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
-  margin-top: 80px;
-}
-.about-card {
-  padding: 40px 32px;
-  border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 20px;
-  background: rgba(255,255,255,0.01);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.about-card:hover {
-  border-color: rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.03);
-  transform: translateY(-6px);
-}
-.about-card-icon {
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
-  font-size: 18px;
-  color: var(--gray-400);
-}
-.about-card h3 {
-  font-size: 15px;
-  font-weight: 400;
-  margin-bottom: 12px;
-  letter-spacing: -0.01em;
-}
-.about-card p {
-  font-size: 13.5px;
-  font-weight: 300;
-  line-height: 1.6;
-  color: var(--gray-500);
-}
-
-/* SOFTWARE */
-.software-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 80px;
-}
-.software-card {
-  padding: 40px 32px;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 20px;
-  background: rgba(255,255,255,0.01);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  overflow: hidden;
-}
-.software-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-.software-card:hover::before { opacity: 1; }
-.software-card:hover {
-  border-color: rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.025);
-  transform: translateY(-8px);
-}
-.software-card .placeholder-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
-  font-size: 20px;
-  color: var(--gray-400);
-}
-.software-card h3 {
-  font-size: 16px;
-  font-weight: 400;
-  margin-bottom: 10px;
-}
-.software-card p {
-  font-size: 13.5px;
-  font-weight: 300;
-  line-height: 1.6;
-  color: var(--gray-500);
-  margin-bottom: 28px;
-}
-.software-card .badge {
-  display: inline-block;
-  padding: 6px 16px;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 300;
-  color: var(--gray-400);
-  letter-spacing: 0.02em;
-}
-
-/* COURSES */
-.courses {
-  background: var(--gray-950);
-}
-.courses-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 80px;
-}
-.course-card {
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 20px;
-  overflow: hidden;
-  background: rgba(255,255,255,0.01);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.course-card:hover {
-  border-color: rgba(255,255,255,0.12);
-  transform: translateY(-8px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-}
-.course-thumb {
-  height: 180px;
-  background: linear-gradient(135deg, var(--gray-900) 0%, var(--gray-800) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-.course-thumb::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 10px,
-    rgba(255,255,255,0.015) 10px,
-    rgba(255,255,255,0.015) 20px
-  );
-}
-.course-thumb .thumb-icon {
-  font-size: 32px;
-  color: var(--gray-500);
-  z-index: 1;
-}
-.course-info {
-  padding: 28px;
-}
-.course-info .cat {
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-bottom: 10px;
-}
-.course-info h3 {
-  font-size: 16px;
-  font-weight: 400;
-  margin-bottom: 20px;
-  letter-spacing: -0.01em;
-}
-.course-info .badge {
-  display: inline-block;
-  padding: 6px 16px;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 300;
-  color: var(--gray-400);
-}
-
-/* WHY CHOOSE US */
-.why-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-top: 80px;
-}
-.why-card {
-  padding: 48px 32px;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 20px;
-  text-align: center;
-  background: rgba(255,255,255,0.01);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.why-card:hover {
-  border-color: rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.025);
-  transform: translateY(-6px);
-}
-.why-card .why-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 24px;
-  font-size: 22px;
-  color: var(--gray-400);
-}
-.why-card h3 {
-  font-size: 15px;
-  font-weight: 400;
-  margin-bottom: 10px;
-}
-.why-card p {
-  font-size: 13px;
-  font-weight: 300;
-  line-height: 1.6;
-  color: var(--gray-500);
-}
-
-/* TESTIMONIALS */
-.testimonials {
-  background: var(--gray-950);
-}
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-top: 80px;
-}
-.testimonial-card {
-  padding: 40px 32px;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 20px;
-  background: rgba(255,255,255,0.01);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.testimonial-card:hover {
-  border-color: rgba(255,255,255,0.1);
-  transform: translateY(-4px);
-}
-.testimonial-card .stars {
-  color: var(--white);
-  font-size: 14px;
-  letter-spacing: 2px;
-  margin-bottom: 20px;
-}
-.testimonial-card blockquote {
-  font-size: 14.5px;
-  font-weight: 300;
-  line-height: 1.7;
-  color: var(--gray-400);
-  margin-bottom: 28px;
-  font-style: italic;
-}
-.testimonial-card .author {
-  font-size: 14px;
-  font-weight: 400;
-  margin-bottom: 4px;
-}
-.testimonial-card .role {
-  font-size: 12px;
-  font-weight: 300;
-  color: var(--gray-500);
-}
-
-/* CONTACT */
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  margin-top: 80px;
-  align-items: start;
-}
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.form-group label {
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-}
-.form-group input,
-.form-group textarea {
-  padding: 16px 20px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  color: var(--white);
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 300;
-  outline: none;
-  transition: all 0.35s ease;
-}
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: var(--gray-800);
-}
-.form-group input:focus,
-.form-group textarea:focus {
-  border-color: rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.04);
-}
-.form-group textarea {
-  min-height: 140px;
-  resize: vertical;
-}
-.contact-form button {
-  padding: 16px 32px;
-  background: var(--white);
-  color: var(--black);
-  border: 1px solid var(--white);
-  border-radius: 100px;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-top: 8px;
-}
-.contact-form button:hover {
-  background: transparent;
-  color: var(--white);
-  transform: translateY(-2px);
-}
-
-.contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-.contact-info-item {
-  padding: 28px;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 16px;
-  background: rgba(255,255,255,0.01);
-}
-.contact-info-item .ci-label {
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-bottom: 10px;
-}
-.contact-info-item .ci-value {
-  font-size: 14px;
-  font-weight: 300;
-  color: var(--gray-400);
-}
-
-/* FOOTER */
-.footer {
-  padding: 80px 48px 40px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-.footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.footer-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 60px;
-}
-.footer-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.footer-logo img {
-  height: 24px;
-  width: auto;
-  opacity: 0.7;
-}
-.footer-nav {
-  display: flex;
-  gap: 48px;
-}
-.footer-nav-col h4 {
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-bottom: 20px;
-}
-.footer-nav-col a {
-  display: block;
-  color: var(--gray-400);
-  text-decoration: none;
-  font-size: 13.5px;
-  font-weight: 300;
-  margin-bottom: 12px;
-  transition: color 0.3s ease;
-}
-.footer-nav-col a:hover { color: var(--white); }
-
-.footer-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 32px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-.footer-bottom p {
-  font-size: 12px;
-  font-weight: 300;
-  color: var(--gray-500);
-}
-.footer-bottom-links {
-  display: flex;
-  gap: 24px;
-}
-.footer-bottom-links a {
-  font-size: 12px;
-  font-weight: 300;
-  color: var(--gray-500);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-.footer-bottom-links a:hover { color: var(--white); }
-
-/* RESPONSIVE */
-@media (max-width: 1024px) {
-  .hero-inner { grid-template-columns: 1fr; gap: 60px; }
-  .hero-visual { height: 360px; order: -1; }
-  .about-grid { grid-template-columns: repeat(2, 1fr); }
-  .software-grid { grid-template-columns: repeat(2, 1fr); }
-  .courses-grid { grid-template-columns: repeat(2, 1fr); }
-  .why-grid { grid-template-columns: repeat(2, 1fr); }
-  .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
-  .contact-grid { grid-template-columns: 1fr; gap: 60px; }
-}
-
-@media (max-width: 768px) {
-  .navbar { padding: 0 24px; }
-  section { padding: 100px 24px; }
-  .nav-links { display: none; }
-  .nav-cta { display: none; }
-  .mobile-toggle { display: flex; }
-  .about-grid { grid-template-columns: 1fr; }
-  .software-grid { grid-template-columns: 1fr; }
-  .courses-grid { grid-template-columns: 1fr; }
-  .why-grid { grid-template-columns: 1fr; }
-  .testimonials-grid { grid-template-columns: 1fr; }
-  .footer-top { flex-direction: column; gap: 40px; }
-  .footer-nav { flex-wrap: wrap; gap: 32px; }
-  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
-  .hero { padding: 100px 24px 60px; }
-  .hero-buttons { flex-direction: column; }
-}
-
-/* Mobile menu */
-.mobile-menu {
-  display: none;
-  position: fixed;
-  top: 72px; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.97);
-  backdrop-filter: blur(30px);
-  z-index: 999;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 32px;
-  padding: 40px;
-}
-.mobile-menu.open { display: flex; }
-.mobile-menu a {
-  color: var(--white);
-  text-decoration: none;
-  font-size: 20px;
-  font-weight: 200;
-  letter-spacing: 0.02em;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KODAROS — Tecnologia, Software & Educação</title>
+    <meta name="description" content="KODAROS desenvolve softwares premium e oferece cursos práticos em tecnologia e marketing digital.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar" id="navbar">
-  <a href="#" class="nav-logo">
-    <img src="kodaros_logo.png" alt="KODAROS">
-  </a>
-  <ul class="nav-links">
-    <li><a href="#inicio">Início</a></li>
-    <li><a href="#softwares">Softwares</a></li>
-    <li><a href="#cursos">Cursos</a></li>
-    <li><a href="#sobre">Sobre</a></li>
-    <li><a href="#depoimentos">Depoimentos</a></li>
-    <li><a href="#contato">Contato</a></li>
-  </ul>
-  <a href="#sobre" class="nav-cta">Conheça a KODAROS</a>
-  <div class="mobile-toggle" onclick="toggleMobileMenu()">
-    <span></span><span></span><span></span>
-  </div>
-</nav>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <img src="kodaros_logo.png" alt="KODAROS">
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#inicio" class="nav-link">Início</a></li>
+                <li><a href="#softwares" class="nav-link">Softwares</a></li>
+                <li><a href="#cursos" class="nav-link">Cursos</a></li>
+                <li><a href="#sobre" class="nav-link">Sobre</a></li>
+                <li><a href="#depoimentos" class="nav-link">Depoimentos</a></li>
+                <li><a href="#contato" class="nav-link">Contato</a></li>
+            </ul>
+            <a href="#softwares" class="nav-cta">Conheça a KODAROS</a>
+            <button class="nav-toggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
 
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#inicio" onclick="toggleMobileMenu()">Início</a>
-  <a href="#softwares" onclick="toggleMobileMenu()">Softwares</a>
-  <a href="#cursos" onclick="toggleMobileMenu()">Cursos</a>
-  <a href="#sobre" onclick="toggleMobileMenu()">Sobre</a>
-  <a href="#depoimentos" onclick="toggleMobileMenu()">Depoimentos</a>
-  <a href="#contato" onclick="toggleMobileMenu()">Contato</a>
-</div>
+    <!-- HERO SECTION -->
+    <section class="hero" id="inicio">
+        <div class="hero-container">
+            <div class="hero-content">
+                <span class="hero-label">Tecnologia • Software • Educação</span>
+                <h1 class="hero-title">Soluções inteligentes para empresas que desejam crescer.</h1>
+                <p class="hero-subtitle">Desenvolvemos softwares modernos e oferecemos cursos práticos em tecnologia e marketing digital para acelerar resultados.</p>
+                <div class="hero-buttons">
+                    <a href="#softwares" class="btn btn-primary">Conhecer Softwares</a>
+                    <a href="#cursos" class="btn btn-secondary">Explorar Cursos</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-abstract">
+                    <div class="abstract-line line-1"></div>
+                    <div class="abstract-line line-2"></div>
+                    <div class="abstract-line line-3"></div>
+                    <div class="abstract-glass glass-1"></div>
+                    <div class="abstract-glass glass-2"></div>
+                    <div class="abstract-glass glass-3"></div>
+                    <div class="abstract-dot dot-1"></div>
+                    <div class="abstract-dot dot-2"></div>
+                    <div class="abstract-dot dot-3"></div>
+                    <div class="abstract-ring ring-1"></div>
+                    <div class="abstract-ring ring-2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- HERO -->
-<section class="hero" id="inicio">
-  <div class="hero-inner">
-    <div class="hero-content">
-      <div class="hero-label">Tecnologia <span>•</span> Software <span>•</span> Educação</div>
-      <h1>Soluções inteligentes para empresas que desejam crescer.</h1>
-      <p class="hero-subtitle">Desenvolvemos softwares modernos e oferecemos cursos práticos em tecnologia e marketing digital para acelerar resultados.</p>
-      <div class="hero-buttons">
-        <a href="#softwares" class="btn-primary">Conhecer Softwares</a>
-        <a href="#cursos" class="btn-secondary">Explorar Cursos</a>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="250" cy="250" rx="180" ry="60" stroke="rgba(255,255,255,0.06)" stroke-width="0.5" transform="rotate(25 250 250)" style="animation: orbit 30s linear infinite; transform-origin: 250px 250px;"/>
-        <ellipse cx="250" cy="250" rx="140" ry="45" stroke="rgba(255,255,255,0.08)" stroke-width="0.5" transform="rotate(-15 250 250)" style="animation: orbit 25s linear infinite reverse; transform-origin: 250px 250px;"/>
-        <ellipse cx="250" cy="250" rx="100" ry="35" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" transform="rotate(60 250 250)" style="animation: orbit 20s linear infinite; transform-origin: 250px 250px;"/>
-        <circle cx="250" cy="250" r="4" fill="rgba(255,255,255,0.8)" style="animation: pulse-glow 3s ease-in-out infinite;"/>
-        <circle cx="250" cy="250" r="20" stroke="rgba(255,255,255,0.08)" stroke-width="0.5" fill="none"/>
-        <circle cx="250" cy="250" r="40" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" fill="none"/>
-        <circle cx="120" cy="180" r="3" fill="rgba(255,255,255,0.3)" style="animation: float 4s ease-in-out infinite;"/>
-        <circle cx="380" cy="160" r="2.5" fill="rgba(255,255,255,0.25)" style="animation: float 5s ease-in-out 0.5s infinite;"/>
-        <circle cx="340" cy="340" r="3.5" fill="rgba(255,255,255,0.2)" style="animation: float 4.5s ease-in-out 1s infinite;"/>
-        <circle cx="160" cy="360" r="2" fill="rgba(255,255,255,0.3)" style="animation: float 3.5s ease-in-out 1.5s infinite;"/>
-        <circle cx="250" cy="120" r="2" fill="rgba(255,255,255,0.2)" style="animation: float 5.5s ease-in-out 0.8s infinite;"/>
-        <circle cx="250" cy="380" r="2.5" fill="rgba(255,255,255,0.15)" style="animation: float 4s ease-in-out 2s infinite;"/>
-        <line x1="250" y1="250" x2="120" y2="180" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-        <line x1="250" y1="250" x2="380" y2="160" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-        <line x1="250" y1="250" x2="340" y2="340" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-        <line x1="250" y1="250" x2="160" y2="360" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-        <rect x="320" y="200" width="80" height="50" rx="8" fill="rgba(255,255,255,0.015)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5" style="animation: float 6s ease-in-out infinite;"/>
-        <rect x="100" y="240" width="70" height="40" rx="6" fill="rgba(255,255,255,0.01)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" style="animation: float 5s ease-in-out 1.2s infinite;"/>
-        <rect x="280" y="300" width="60" height="35" rx="6" fill="rgba(255,255,255,0.012)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" style="animation: float 7s ease-in-out 0.6s infinite;"/>
-        <g opacity="0.08">
-          <circle cx="200" cy="200" r="1" fill="white"/>
-          <circle cx="220" cy="200" r="1" fill="white"/>
-          <circle cx="240" cy="200" r="1" fill="white"/>
-          <circle cx="260" cy="200" r="1" fill="white"/>
-          <circle cx="280" cy="200" r="1" fill="white"/>
-          <circle cx="300" cy="200" r="1" fill="white"/>
-          <circle cx="200" cy="220" r="1" fill="white"/>
-          <circle cx="220" cy="220" r="1" fill="white"/>
-          <circle cx="240" cy="220" r="1" fill="white"/>
-          <circle cx="260" cy="220" r="1" fill="white"/>
-          <circle cx="280" cy="220" r="1" fill="white"/>
-          <circle cx="300" cy="220" r="1" fill="white"/>
-          <circle cx="200" cy="240" r="1" fill="white"/>
-          <circle cx="220" cy="240" r="1" fill="white"/>
-          <circle cx="240" cy="240" r="1" fill="white"/>
-          <circle cx="260" cy="240" r="1" fill="white"/>
-          <circle cx="280" cy="240" r="1" fill="white"/>
-          <circle cx="300" cy="240" r="1" fill="white"/>
-        </g>
-      </svg>
-    </div>
-  </div>
-</section>
+    <!-- ABOUT SECTION -->
+    <section class="about" id="sobre">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <span class="section-label">Sobre a KODAROS</span>
+                    <h2 class="section-title">Tecnologia de ponta para impulsionar o seu negócio.</h2>
+                    <p class="section-desc">A KODAROS é uma empresa brasileira especializada no desenvolvimento de softwares premium e na criação de conteúdos educacionais de alta qualidade. Nossa missão é transformar a maneira como empresas e profissionais utilizam a tecnologia.</p>
+                    <div class="about-pillars">
+                        <div class="pillar">
+                            <div class="pillar-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                            </div>
+                            <span>Desenvolvimento de Software</span>
+                        </div>
+                        <div class="pillar">
+                            <div class="pillar-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                            </div>
+                            <span>Tecnologia & Automação</span>
+                        </div>
+                        <div class="pillar">
+                            <div class="pillar-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                            </div>
+                            <span>Marketing Digital</span>
+                        </div>
+                        <div class="pillar">
+                            <div class="pillar-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.66 4 3 9 3s9-1.34 9-3v-5"/></svg>
+                            </div>
+                            <span>Educação & Cursos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- ABOUT -->
-<section class="about" id="sobre">
-  <div class="section-inner">
-    <div class="reveal">
-      <p class="section-label">Sobre a KODAROS</p>
-      <h2 class="section-title">Tecnologia, inovação e educação em um só lugar.</h2>
-      <p class="section-desc">A KODAROS nasceu com o propósito de transformar a maneira como empresas e profissionais interagem com a tecnologia. Unimos desenvolvimento de software de ponta com conteúdo educacional de alta qualidade.</p>
-    </div>
-    <div class="about-grid">
-      <div class="about-card reveal">
-        <div class="about-card-icon">◈</div>
-        <h3>Desenvolvimento de Software</h3>
-        <p>Soluções sob medida com arquitetura moderna, escalável e focada em resultados reais para o seu negócio.</p>
-      </div>
-      <div class="about-card reveal">
-        <div class="about-card-icon">◎</div>
-        <h3>Tecnologia & Automação</h3>
-        <p>Processos inteligentes que eliminam gargalos e aumentam a produtividade da sua equipe.</p>
-      </div>
-      <div class="about-card reveal">
-        <div class="about-card-icon">◉</div>
-        <h3>Marketing Digital</h3>
-        <p>Estratégias data-driven que conectam sua marca ao público certo no momento certo.</p>
-      </div>
-      <div class="about-card reveal">
-        <div class="about-card-icon">◇</div>
-        <h3>Educação Tecnológica</h3>
-        <p>Cursos práticos e atualizados para profissionais que querem se destacar no mercado.</p>
-      </div>
-    </div>
-  </div>
-</section>
+    <!-- SOFTWARE SECTION -->
+    <section class="software" id="softwares">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Nossos Produtos</span>
+                <h2 class="section-title">Nossos Softwares</h2>
+                <p class="section-desc">Soluções tecnológicas desenvolvidas com excelência para atender às necessidades do mercado.</p>
+            </div>
+            <div class="software-grid">
+                <div class="software-card">
+                    <div class="software-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                    </div>
+                    <h3>Software Placeholder 1</h3>
+                    <p>Descrição do produto em desenvolvimento. Em breve mais informações.</p>
+                    <span class="badge">Em breve</span>
+                </div>
+                <div class="software-card">
+                    <div class="software-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <h3>Software Placeholder 2</h3>
+                    <p>Descrição do produto em desenvolvimento. Em breve mais informações.</p>
+                    <span class="badge">Em breve</span>
+                </div>
+                <div class="software-card">
+                    <div class="software-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <h3>Software Placeholder 3</h3>
+                    <p>Descrição do produto em desenvolvimento. Em breve mais informações.</p>
+                    <span class="badge">Em breve</span>
+                </div>
+                <div class="software-card">
+                    <div class="software-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+                    </div>
+                    <h3>Software Placeholder 4</h3>
+                    <p>Descrição do produto em desenvolvimento. Em breve mais informações.</p>
+                    <span class="badge">Em breve</span>
+                </div>
+                <div class="software-card">
+                    <div class="software-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>
+                    </div>
+                    <h3>Software Placeholder 5</h3>
+                    <p>Descrição do produto em desenvolvimento. Em breve mais informações.</p>
+                    <span class="badge">Em breve</span>
+                </div>
+                <div class="software-card">
+                    <div class="software-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <h3>Software Placeholder 6</h3>
+                    <p>Descrição do produto em desenvolvimento. Em breve mais informações.</p>
+                    <span class="badge">Em breve</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- SOFTWARE -->
-<section id="softwares">
-  <div class="section-inner">
-    <div class="reveal">
-      <p class="section-label">Nossos Produtos</p>
-      <h2 class="section-title">Nossos Softwares</h2>
-      <p class="section-desc">Ferramentas pensadas para resolver problemas reais. Cada solução é desenvolvida com foco em usabilidade, performance e escalabilidade.</p>
-    </div>
-    <div class="software-grid">
-      <div class="software-card reveal">
-        <div class="placeholder-icon">◐</div>
-        <h3>Software Placeholder 01</h3>
-        <p>Descrição reservada para futuro produto da linha de softwares KODAROS.</p>
-        <span class="badge">Em breve</span>
-      </div>
-      <div class="software-card reveal">
-        <div class="placeholder-icon">◑</div>
-        <h3>Software Placeholder 02</h3>
-        <p>Descrição reservada para futuro produto da linha de softwares KODAROS.</p>
-        <span class="badge">Em breve</span>
-      </div>
-      <div class="software-card reveal">
-        <div class="placeholder-icon">◒</div>
-        <h3>Software Placeholder 03</h3>
-        <p>Descrição reservada para futuro produto da linha de softwares KODAROS.</p>
-        <span class="badge">Em breve</span>
-      </div>
-      <div class="software-card reveal">
-        <div class="placeholder-icon">◓</div>
-        <h3>Software Placeholder 04</h3>
-        <p>Descrição reservada para futuro produto da linha de softwares KODAROS.</p>
-        <span class="badge">Em breve</span>
-      </div>
-      <div class="software-card reveal">
-        <div class="placeholder-icon">◔</div>
-        <h3>Software Placeholder 05</h3>
-        <p>Descrição reservada para futuro produto da linha de softwares KODAROS.</p>
-        <span class="badge">Em breve</span>
-      </div>
-      <div class="software-card reveal">
-        <div class="placeholder-icon">◕</div>
-        <h3>Software Placeholder 06</h3>
-        <p>Descrição reservada para futuro produto da linha de softwares KODAROS.</p>
-        <span class="badge">Em breve</span>
-      </div>
-    </div>
-  </div>
-</section>
+    <!-- COURSES SECTION -->
+    <section class="courses" id="cursos">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Educação</span>
+                <h2 class="section-title">Nossos Cursos</h2>
+                <p class="section-desc">Conteúdo prático e de alta qualidade para você dominar as tecnologias do futuro.</p>
+            </div>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-thumb">
+                        <div class="course-thumb-placeholder">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <span class="course-category">Tecnologia</span>
+                        <h3>Curso Placeholder 1</h3>
+                        <p>Descrição do curso em preparação. Disponível em breve.</p>
+                        <span class="badge">Disponível em breve</span>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-thumb">
+                        <div class="course-thumb-placeholder">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <span class="course-category">Marketing Digital</span>
+                        <h3>Curso Placeholder 2</h3>
+                        <p>Descrição do curso em preparação. Disponível em breve.</p>
+                        <span class="badge">Disponível em breve</span>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-thumb">
+                        <div class="course-thumb-placeholder">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <span class="course-category">Automação</span>
+                        <h3>Curso Placeholder 3</h3>
+                        <p>Descrição do curso em preparação. Disponível em breve.</p>
+                        <span class="badge">Disponível em breve</span>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-thumb">
+                        <div class="course-thumb-placeholder">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <span class="course-category">Desenvolvimento</span>
+                        <h3>Curso Placeholder 4</h3>
+                        <p>Descrição do curso em preparação. Disponível em breve.</p>
+                        <span class="badge">Disponível em breve</span>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-thumb">
+                        <div class="course-thumb-placeholder">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <span class="course-category">Design</span>
+                        <h3>Curso Placeholder 5</h3>
+                        <p>Descrição do curso em preparação. Disponível em breve.</p>
+                        <span class="badge">Disponível em breve</span>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-thumb">
+                        <div class="course-thumb-placeholder">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        </div>
+                    </div>
+                    <div class="course-info">
+                        <span class="course-category">Estratégia</span>
+                        <h3>Curso Placeholder 6</h3>
+                        <p>Descrição do curso em preparação. Disponível em breve.</p>
+                        <span class="badge">Disponível em breve</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- COURSES -->
-<section class="courses" id="cursos">
-  <div class="section-inner">
-    <div class="reveal">
-      <p class="section-label">Aprendizado Contínuo</p>
-      <h2 class="section-title">Nossos Cursos</h2>
-      <p class="section-desc">Conteúdo prático e direto ao ponto, criado por profissionais experientes para acelerar sua carreira em tecnologia.</p>
-    </div>
-    <div class="courses-grid">
-      <div class="course-card reveal">
-        <div class="course-thumb"><span class="thumb-icon">◈</span></div>
-        <div class="course-info">
-          <p class="cat">Tecnologia</p>
-          <h3>Curso Placeholder 01</h3>
-          <span class="badge">Disponível em breve</span>
+    <!-- WHY CHOOSE US -->
+    <section class="why-us">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Diferenciais</span>
+                <h2 class="section-title">Por que escolher a KODAROS?</h2>
+            </div>
+            <div class="why-grid">
+                <div class="why-card">
+                    <div class="why-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <h3>Tecnologia Moderna</h3>
+                    <p>Utilizamos as ferramentas e frameworks mais avançados do mercado para entregar produtos de alta performance.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    </div>
+                    <h3>Soluções Escaláveis</h3>
+                    <p>Arquiteturas pensadas para crescer junto com o seu negócio, sem limitações técnicas.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <h3>Experiência Premium</h3>
+                    <p>Cada detalhe é cuidadosamente planejado para oferecer a melhor experiência possível ao usuário.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                    </div>
+                    <h3>Suporte Especializado</h3>
+                    <p>Equipe técnica qualificada pronta para ajudar em todas as etapas da sua jornada.</p>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="course-card reveal">
-        <div class="course-thumb"><span class="thumb-icon">◎</span></div>
-        <div class="course-info">
-          <p class="cat">Marketing Digital</p>
-          <h3>Curso Placeholder 02</h3>
-          <span class="badge">Disponível em breve</span>
-        </div>
-      </div>
-      <div class="course-card reveal">
-        <div class="course-thumb"><span class="thumb-icon">◉</span></div>
-        <div class="course-info">
-          <p class="cat">Automação</p>
-          <h3>Curso Placeholder 03</h3>
-          <span class="badge">Disponível em breve</span>
-        </div>
-      </div>
-      <div class="course-card reveal">
-        <div class="course-thumb"><span class="thumb-icon">◇</span></div>
-        <div class="course-info">
-          <p class="cat">Desenvolvimento</p>
-          <h3>Curso Placeholder 04</h3>
-          <span class="badge">Disponível em breve</span>
-        </div>
-      </div>
-      <div class="course-card reveal">
-        <div class="course-thumb"><span class="thumb-icon">◐</span></div>
-        <div class="course-info">
-          <p class="cat">Design</p>
-          <h3>Curso Placeholder 05</h3>
-          <span class="badge">Disponível em breve</span>
-        </div>
-      </div>
-      <div class="course-card reveal">
-        <div class="course-thumb"><span class="thumb-icon">◑</span></div>
-        <div class="course-info">
-          <p class="cat">Produto</p>
-          <h3>Curso Placeholder 06</h3>
-          <span class="badge">Disponível em breve</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- WHY CHOOSE US -->
-<section>
-  <div class="section-inner">
-    <div class="reveal" style="text-align: center;">
-      <p class="section-label">Diferenciais</p>
-      <h2 class="section-title" style="margin: 0 auto 24px;">Por que escolher a KODAROS?</h2>
-      <p class="section-desc" style="margin: 0 auto;">Cada detalhe da nossa entrega é pensado para oferecer a melhor experiência possível.</p>
-    </div>
-    <div class="why-grid">
-      <div class="why-card reveal">
-        <div class="why-icon">◈</div>
-        <h3>Tecnologia Moderna</h3>
-        <p>Utilizamos as stacks mais atualizadas do mercado para garantir performance e segurança.</p>
-      </div>
-      <div class="why-card reveal">
-        <div class="why-icon">◎</div>
-        <h3>Soluções Escaláveis</h3>
-        <p>Arquitetura pensada para crescer junto com o seu negócio, sem limitações.</p>
-      </div>
-      <div class="why-card reveal">
-        <div class="why-icon">◉</div>
-        <h3>Experiência Premium</h3>
-        <p>Design refinado e interface intuitiva em cada produto que entregamos.</p>
-      </div>
-      <div class="why-card reveal">
-        <div class="why-icon">◇</div>
-        <h3>Suporte Especializado</h3>
-        <p>Equipe técnica dedicada para acompanhar você em cada etapa do projeto.</p>
-      </div>
-    </div>
-  </div>
-</section>
+    <!-- TESTIMONIALS -->
+    <section class="testimonials" id="depoimentos">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Depoimentos</span>
+                <h2 class="section-title">O que dizem sobre nós</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"A plataforma trouxe muito mais organização para nossa rotina. A interface é intuitiva e os recursos são exatamente o que precisávamos."</p>
+                    <div class="testimonial-author">
+                        <strong>Lucas Andrade</strong>
+                        <span>Software Engineer</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Design extremamente limpo e ferramentas muito intuitivas. É raro encontrar uma empresa que combine estética e funcionalidade tão bem."</p>
+                    <div class="testimonial-author">
+                        <strong>Mariana Costa</strong>
+                        <span>Product Designer</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Uma experiência premium do início ao fim. Desde o primeiro contato até a entrega final, tudo foi impecável."</p>
+                    <div class="testimonial-author">
+                        <strong>Carlos Mendes</strong>
+                        <span>Tech Lead</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Os conteúdos são claros e realmente aplicáveis. Consegui colocar em prática tudo que aprendi nos cursos da KODAROS."</p>
+                    <div class="testimonial-author">
+                        <strong>Juliana Rocha</strong>
+                        <span>Marketing Analyst</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"A qualidade do suporte é impressionante. Sempre que precisei, a equipe respondeu com rapidez e soluções eficientes."</p>
+                    <div class="testimonial-author">
+                        <strong>Rafael Torres</strong>
+                        <span>CEO</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Investimos em várias soluções antes, mas a KODAROS entregou exatamente o que prometeu. Resultados visíveis em pouco tempo."</p>
+                    <div class="testimonial-author">
+                        <strong>Fernanda Lima</strong>
+                        <span>Operations Manager</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="depoimentos">
-  <div class="section-inner">
-    <div class="reveal" style="text-align: center;">
-      <p class="section-label">Opiniões</p>
-      <h2 class="section-title" style="margin: 0 auto 24px;">Depoimentos</h2>
-      <p class="section-desc" style="margin: 0 auto;">O que dizem os profissionais que já conhecem a KODAROS.</p>
-    </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card reveal">
-        <div class="stars">★★★★★</div>
-        <blockquote>"A plataforma trouxe muito mais organização para nossa rotina."</blockquote>
-        <p class="author">Lucas Andrade</p>
-        <p class="role">Software Engineer</p>
-      </div>
-      <div class="testimonial-card reveal">
-        <div class="stars">★★★★★</div>
-        <blockquote>"Design extremamente limpo e ferramentas muito intuitivas."</blockquote>
-        <p class="author">Mariana Costa</p>
-        <p class="role">Product Designer</p>
-      </div>
-      <div class="testimonial-card reveal">
-        <div class="stars">★★★★★</div>
-        <blockquote>"Uma experiência premium do início ao fim."</blockquote>
-        <p class="author">Carlos Mendes</p>
-        <p class="role">Tech Lead</p>
-      </div>
-      <div class="testimonial-card reveal">
-        <div class="stars">★★★★★</div>
-        <blockquote>"Os conteúdos são claros e realmente aplicáveis."</blockquote>
-        <p class="author">Juliana Rocha</p>
-        <p class="role">Marketing Analyst</p>
-      </div>
-      <div class="testimonial-card reveal">
-        <div class="stars">★★★★★</div>
-        <blockquote>"A qualidade do suporte superou todas as minhas expectativas."</blockquote>
-        <p class="author">Fernando Lima</p>
-        <p class="role">CTO</p>
-      </div>
-      <div class="testimonial-card reveal">
-        <div class="stars">★★★★★</div>
-        <blockquote>"Raramente vejo uma empresa tão comprometida com a excelência."</blockquote>
-        <p class="author">Amanda Souza</p>
-        <p class="role">UX Researcher</p>
-      </div>
-    </div>
-  </div>
-</section>
+    <!-- CONTACT SECTION — FALE CONOSCO -->
+    <section class="contact" id="contato">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Contato</span>
+                <h2 class="section-title">Fale Conosco</h2>
+                <p class="section-desc">Entre em contato conosco. Estamos prontos para ajudar o seu negócio a crescer.</p>
+            </div>
+            <div class="contact-channels">
+                <a href="https://wa.me/559192094504" target="_blank" rel="noopener" class="contact-channel">
+                    <div class="channel-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                    </div>
+                    <div class="channel-info">
+                        <span class="channel-label">WhatsApp</span>
+                        <span class="channel-value">+55 91 9209-4504</span>
+                    </div>
+                </a>
+                <a href="mailto:kodaros01@gmail.com" class="contact-channel">
+                    <div class="channel-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+                    </div>
+                    <div class="channel-info">
+                        <span class="channel-label">E-mail</span>
+                        <span class="channel-value">kodaros01@gmail.com</span>
+                    </div>
+                </a>
+                <a href="https://www.instagram.com/kodaros01" target="_blank" rel="noopener" class="contact-channel">
+                    <div class="channel-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><path d="M17.5 6.5h.01"/></svg>
+                    </div>
+                    <div class="channel-info">
+                        <span class="channel-label">Instagram</span>
+                        <span class="channel-value">@kodaros01</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
 
-<!-- CONTACT -->
-<section id="contato">
-  <div class="section-inner">
-    <div class="reveal">
-      <p class="section-label">Fale Conosco</p>
-      <h2 class="section-title">Entre em contato</h2>
-      <p class="section-desc">Tem um projeto em mente ou quer saber mais sobre nossos serviços? Envie uma mensagem e retornaremos em breve.</p>
-    </div>
-    <div class="contact-grid">
-      <form class="contact-form reveal" onsubmit="event.preventDefault(); alert('Mensagem enviada! (simulação)');">
-        <div class="form-group">
-          <label for="nome">Nome</label>
-          <input type="text" id="nome" placeholder="Seu nome completo">
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="kodaros_logo.png" alt="KODAROS" class="footer-logo">
+                    <p>Tecnologia, software e educação para empresas que desejam crescer.</p>
+                </div>
+                <div class="footer-nav">
+                    <div class="footer-col">
+                        <h4>Navegação</h4>
+                        <ul>
+                            <li><a href="#inicio">Início</a></li>
+                            <li><a href="#softwares">Softwares</a></li>
+                            <li><a href="#cursos">Cursos</a></li>
+                            <li><a href="#sobre">Sobre</a></li>
+                            <li><a href="#depoimentos">Depoimentos</a></li>
+                            <li><a href="#contato">Contato</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="privacidade.html">Política de Privacidade</a></li>
+                            <li><a href="termos.html">Termos de Uso</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Redes Sociais</h4>
+                        <ul>
+                            <li><a href="https://www.instagram.com/kodaros01" target="_blank" rel="noopener">Instagram</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-separator"></div>
+            <div class="footer-bottom">
+                <p>© 2026 KODAROS. Todos os direitos reservados.</p>
+            </div>
         </div>
-        <div class="form-group">
-          <label for="email">E-mail</label>
-          <input type="email" id="email" placeholder="seu@email.com">
-        </div>
-        <div class="form-group">
-          <label for="mensagem">Mensagem</label>
-          <textarea id="mensagem" placeholder="Como podemos ajudar?"></textarea>
-        </div>
-        <button type="submit">Entrar em contato</button>
-      </form>
-      <div class="contact-info reveal">
-        <div class="contact-info-item">
-          <p class="ci-label">Telefone</p>
-          <p class="ci-value">+55 (XX) XXXXX-XXXX</p>
-        </div>
-        <div class="contact-info-item">
-          <p class="ci-label">WhatsApp</p>
-          <p class="ci-value">+55 (XX) XXXXX-XXXX</p>
-        </div>
-        <div class="contact-info-item">
-          <p class="ci-label">E-mail</p>
-          <p class="ci-value">contato@kodaros.com.br</p>
-        </div>
-        <div class="contact-info-item">
-          <p class="ci-label">Endereço</p>
-          <p class="ci-value">São Paulo, SP — Brasil</p>
-        </div>
-        <div class="contact-info-item">
-          <p class="ci-label">Redes Sociais</p>
-          <p class="ci-value">LinkedIn • Instagram • Twitter</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </footer>
 
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-logo">
-        <img src="kodaros_logo.png" alt="KODAROS">
-      </div>
-      <div class="footer-nav">
-        <div class="footer-nav-col">
-          <h4>Navegação</h4>
-          <a href="#inicio">Início</a>
-          <a href="#softwares">Softwares</a>
-          <a href="#cursos">Cursos</a>
-          <a href="#sobre">Sobre</a>
-        </div>
-        <div class="footer-nav-col">
-          <h4>Empresa</h4>
-          <a href="#depoimentos">Depoimentos</a>
-          <a href="#contato">Contato</a>
-          <a href="#">Carreiras</a>
-          <a href="#">Blog</a>
-        </div>
-        <div class="footer-nav-col">
-          <h4>Legal</h4>
-          <a href="#">Política de Privacidade</a>
-          <a href="#">Termos de Uso</a>
-        </div>
-        <div class="footer-nav-col">
-          <h4>Social</h4>
-          <a href="#">LinkedIn</a>
-          <a href="#">Instagram</a>
-          <a href="#">Twitter</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2026 KODAROS. Todos os direitos reservados.</p>
-      <div class="footer-bottom-links">
-        <a href="#">Política de Privacidade</a>
-        <a href="#">Termos de Uso</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<script>
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 60) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
-  }
-});
-
-function toggleMobileMenu() {
-  document.getElementById('mobileMenu').classList.toggle('open');
-}
-
-const revealElements = document.querySelectorAll('.reveal');
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry, index) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => {
-        entry.target.classList.add('visible');
-      }, index * 80);
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-revealElements.forEach(el => revealObserver.observe(el));
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html>
