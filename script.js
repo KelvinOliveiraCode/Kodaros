@@ -2,40 +2,58 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     // ========================================
-    // NAVBAR — HIDE ON SCROLL DOWN, SHOW ON SCROLL UP
+    // NAVBAR — RESPONSIVE HIDE/SHOW ON SCROLL
     // ========================================
     const navbar = document.getElementById('navbar');
     let lastScrollY = window.pageYOffset;
     let ticking = false;
+    let scrollTimeout;
+    let isScrolling = false;
 
     function handleNavbarScroll() {
         const currentScrollY = window.pageYOffset;
+        const scrollDelta = currentScrollY - lastScrollY;
+        const scrollDirection = scrollDelta > 0 ? 'down' : 'up';
+        const scrollSpeed = Math.abs(scrollDelta);
 
         // Add/remove scrolled background
-        if (currentScrollY > 50) {
+        if (currentScrollY > 30) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
         }
 
-        // Hide/show based on scroll direction
-        if (currentScrollY > lastScrollY && currentScrollY > 100) {
-            // Scrolling down — hide
+        // Responsive hide/show based on scroll direction and speed
+        if (scrollDirection === 'down' && currentScrollY > 80 && scrollSpeed > 2) {
+            // Scrolling down fast — hide navbar
             navbar.classList.add('hidden');
-        } else {
-            // Scrolling up — show
+            navbar.classList.remove('visible');
+        } else if (scrollDirection === 'up') {
+            // Scrolling up — show navbar immediately
             navbar.classList.remove('hidden');
+            navbar.classList.add('visible');
         }
 
         lastScrollY = currentScrollY;
         ticking = false;
     }
 
+    // Throttled scroll listener for performance
     window.addEventListener('scroll', () => {
+        isScrolling = true;
+        clearTimeout(scrollTimeout);
+
         if (!ticking) {
             requestAnimationFrame(handleNavbarScroll);
             ticking = true;
         }
+
+        // Detect scroll stop — show navbar when user stops scrolling
+        scrollTimeout = setTimeout(() => {
+            isScrolling = false;
+            navbar.classList.remove('hidden');
+            navbar.classList.add('visible');
+        }, 150);
     }, { passive: true });
 
     handleNavbarScroll();
@@ -96,28 +114,34 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ========================================
-    // SCROLL REVEAL ANIMATION
+    // SCROLL REVEAL ANIMATION (RESPONSIVE)
     // ========================================
     const revealElements = document.querySelectorAll(
         '.section-header, .software-card, .course-card, .why-card, ' +
-        '.testimonial-card, .pillar, .contact-channel'
+        '.testimonial-card, .pillar, .contact-channel, .em-breve-banner'
     );
 
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
+                // Staggered reveal based on element index within parent
+                const parent = entry.target.parentElement;
+                if (parent) {
+                    const siblings = Array.from(parent.children);
+                    const index = siblings.indexOf(entry.target);
+                    entry.target.style.transitionDelay = `${index * 0.06}s`;
+                }
                 entry.target.classList.add('active');
                 revealObserver.unobserve(entry.target);
             }
         });
     }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.08,
+        rootMargin: '0px 0px -40px 0px'
     });
 
-    revealElements.forEach((el, index) => {
+    revealElements.forEach(el => {
         el.classList.add('reveal');
-        el.style.transitionDelay = `${index * 0.05}s`;
         revealObserver.observe(el);
     });
 
@@ -127,10 +151,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const heroVisual = document.querySelector('.hero-visual');
 
     if (heroVisual && !window.matchMedia('(pointer: coarse)').matches) {
+        let heroScrollTicking = false;
+
         window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const rate = scrolled * 0.15;
-            heroVisual.style.transform = `translateY(${rate}px)`;
+            if (!heroScrollTicking) {
+                requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const rate = scrolled * 0.12;
+                    heroVisual.style.transform = `translateY(${rate}px)`;
+                    heroScrollTicking = false;
+                });
+                heroScrollTicking = true;
+            }
         }, { passive: true });
     }
 
@@ -140,12 +172,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const heroAbstract = document.querySelector('.hero-abstract');
 
     if (heroAbstract && !window.matchMedia('(pointer: coarse)').matches) {
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 20;
-            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        let mouseX = 0, mouseY = 0;
+        let currentX = 0, currentY = 0;
+        let mouseActive = false;
+        let mouseTimeout;
 
-            heroAbstract.style.transform = `translate(${x}px, ${y}px)`;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 16;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 16;
+            mouseActive = true;
+
+            clearTimeout(mouseTimeout);
+            mouseTimeout = setTimeout(() => {
+                mouseActive = false;
+            }, 100);
         });
+
+        function animateHeroParallax() {
+            if (mouseActive) {
+                currentX += (mouseX - currentX) * 0.06;
+                currentY += (mouseY - currentY) * 0.06;
+                heroAbstract.style.transform = `translate(${currentX}px, ${currentY}px)`;
+            }
+            requestAnimationFrame(animateHeroParallax);
+        }
+
+        animateHeroParallax();
     }
 
     // ========================================
@@ -155,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('.nav-link');
 
     function setActiveLink() {
-        const scrollPos = window.pageYOffset + 150;
+        const scrollPos = window.pageYOffset + 200;
 
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
@@ -173,6 +225,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    window.addEventListener('scroll', setActiveLink, { passive: true });
+    let activeLinkTicking = false;
+    window.addEventListener('scroll', () => {
+        if (!activeLinkTicking) {
+            requestAnimationFrame(() => {
+                setActiveLink();
+                activeLinkTicking = false;
+            });
+            activeLinkTicking = true;
+        }
+    }, { passive: true });
+
     setActiveLink();
 });

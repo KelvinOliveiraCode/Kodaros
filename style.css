@@ -51,7 +51,7 @@ ul {
 }
 
 /* ========================================
-   NAVBAR — HIDE/SHOW ON SCROLL
+   NAVBAR — HIDE/SHOW ON SCROLL (RESPONSIVO)
    ======================================== */
 .navbar {
     position: fixed;
@@ -60,28 +60,36 @@ ul {
     right: 0;
     z-index: 1000;
     padding: 20px 0;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                background 0.35s ease,
+                padding 0.35s ease,
+                opacity 0.3s ease;
+    will-change: transform;
 }
 
 .navbar.hidden {
     transform: translateY(-100%);
+    opacity: 0;
+}
+
+.navbar.visible {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 .navbar.scrolled {
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 14px 0;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(24px) saturate(1.2);
+    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 0;
 }
 
 .navbar-solid {
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(24px) saturate(1.2);
+    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .nav-container {
@@ -93,15 +101,15 @@ ul {
     justify-content: space-between;
 }
 
-/* LOGO — SEM FILTER INVERT (imagem já é branca no fundo preto) */
 .nav-logo img {
     height: 38px;
     width: auto;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .nav-logo:hover img {
     opacity: 0.8;
+    transform: scale(1.02);
 }
 
 .nav-menu {
@@ -117,6 +125,7 @@ ul {
     letter-spacing: 0.02em;
     position: relative;
     padding-bottom: 4px;
+    transition: color 0.25s ease;
 }
 
 .nav-link::after {
@@ -503,6 +512,56 @@ ul {
     background: #000000;
 }
 
+/* EM BREVE BANNER */
+.em-breve-banner {
+    text-align: center;
+    padding: 48px 32px;
+    margin-bottom: 64px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.015);
+    position: relative;
+    overflow: hidden;
+}
+
+.em-breve-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+.em-breve-text {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    padding: 8px 20px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.em-breve-desc {
+    font-size: 0.9375rem;
+    font-weight: 300;
+    color: #6B6B6B;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
 .software-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -589,6 +648,10 @@ ul {
 .courses {
     padding: 140px 0;
     background: #0F0F0F;
+}
+
+.courses .em-breve-banner {
+    background: rgba(255, 255, 255, 0.01);
 }
 
 .courses-grid {
@@ -774,7 +837,7 @@ ul {
 }
 
 /* ========================================
-   CONTACT — FALE CONOSCO
+   CONTACT
    ======================================== */
 .contact {
     padding: 140px 0;
@@ -870,7 +933,6 @@ ul {
     max-width: 280px;
 }
 
-/* FOOTER LOGO — SEM FILTER INVERT */
 .footer-logo {
     height: 32px;
     width: auto;
@@ -1041,6 +1103,11 @@ ul {
     to { transform: rotate(360deg); }
 }
 
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
 /* Scroll reveal */
 .reveal {
     opacity: 0;
@@ -1156,6 +1223,11 @@ ul {
     }
 
     .section-header {
+        margin-bottom: 48px;
+    }
+
+    .em-breve-banner {
+        padding: 36px 24px;
         margin-bottom: 48px;
     }
 }
