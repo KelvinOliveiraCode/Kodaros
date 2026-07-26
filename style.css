@@ -724,6 +724,18 @@ ul {
 }
 
 /* ========================================
+   E-BOOKS
+   ======================================== */
+.ebooks {
+    padding: 140px 0;
+    background: #000000;
+}
+
+.ebooks .em-breve-banner {
+    background: rgba(255, 255, 255, 0.015);
+}
+
+/* ========================================
    WHY CHOOSE US
    ======================================== */
 .why-us {
@@ -1118,6 +1130,379 @@ ul {
 .reveal.active {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* ========================================
+   E-BOOKS CTA
+   ======================================== */
+.ebooks-cta {
+    text-align: center;
+    padding: 56px 40px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.015);
+    max-width: 640px;
+    margin: 0 auto;
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                box-shadow 0.5s ease,
+                border-color 0.4s ease;
+}
+
+.ebooks-cta:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+}
+
+.ebooks-cta-desc {
+    font-size: 1rem;
+    font-weight: 300;
+    color: #A0A0A0;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ebooks-cta .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 16px 36px;
+    font-size: 0.9375rem;
+}
+
+.ebooks-cta .btn svg {
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.ebooks-cta .btn:hover svg {
+    transform: translate(3px, -3px);
+}
+
+/* ========================================
+   MICRO-MOVEMENTS ON HOVER
+   ======================================== */
+
+/* Smooth scale on all cards */
+.software-card,
+.course-card,
+.why-card,
+.testimonial-card,
+.contact-channel,
+.pillar,
+.em-breve-banner {
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                border-color 0.4s ease,
+                background 0.4s ease;
+}
+
+/* Gentle lift on hover */
+.software-card:hover,
+.course-card:hover,
+.why-card:hover,
+.testimonial-card:hover,
+.pillar:hover {
+    transform: translateY(-8px) scale(1.01);
+}
+
+/* Contact channel — subtle glow */
+.contact-channel:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Em Breve banner — breathing effect */
+.em-breve-banner:hover {
+    transform: translateY(-4px) scale(1.005);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Software & course icons — gentle pulse */
+.software-icon,
+.why-icon,
+.channel-icon {
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                background 0.4s ease,
+                border-color 0.4s ease,
+                color 0.4s ease;
+}
+
+.software-card:hover .software-icon,
+.why-card:hover .why-icon {
+    transform: scale(1.08);
+}
+
+.contact-channel:hover .channel-icon {
+    transform: scale(1.1);
+}
+
+/* Navigation links — smooth underline slide */
+.nav-link {
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Buttons — press effect */
+.btn {
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+                box-shadow 0.3s ease,
+                background 0.3s ease,
+                border-color 0.3s ease;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+/* Footer links — soft color shift */
+.footer-col a {
+    transition: color 0.3s ease,
+                transform 0.3s ease,
+                opacity 0.3s ease;
+}
+
+.footer-col a:hover {
+    transform: translateX(3px);
+}
+
+/* Logo — subtle breathing */
+.nav-logo img {
+    transition: opacity 0.3s ease,
+                transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.nav-logo:hover img {
+    transform: scale(1.03);
+}
+
+/* Section labels — letter spacing expansion */
+.section-label {
+    transition: letter-spacing 0.4s ease,
+                color 0.4s ease;
+}
+
+.section-header:hover .section-label {
+    letter-spacing: 0.2em;
+    color: #A0A0A0;
+}
+
+/* Stars rating — twinkle */
+.stars {
+    transition: letter-spacing 0.4s ease,
+                opacity 0.4s ease;
+}
+
+.testimonial-card:hover .stars {
+    letter-spacing: 4px;
+    opacity: 0.9;
+}
+
+/* Badge — subtle shift */
+.badge {
+    transition: background 0.3s ease,
+                color 0.3s ease,
+                border-color 0.3s ease,
+                transform 0.3s ease;
+}
+
+.software-card:hover .badge,
+.course-card:hover .badge {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Hero abstract — speed up on hover */
+.hero-visual:hover .abstract-line {
+    animation-duration: 3s;
+}
+
+.hero-visual:hover .abstract-glass {
+    animation-duration: 4s;
+}
+
+/* Smooth scroll indicator feel */
+html {
+    scroll-behavior: smooth;
+}
+
+/* All images — gentle zoom */
+img {
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 0.4s ease;
+}
+
+/* Footer logo */
+.footer-logo {
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 0.3s ease;
+}
+
+.footer-brand:hover .footer-logo {
+    transform: scale(1.04);
+}
+
+/* Separator line — shimmer on section hover */
+.footer-separator {
+    transition: background 0.5s ease;
+}
+
+.footer:hover .footer-separator {
+    background: linear-gradient(90deg, 
+        rgba(255,255,255,0.03) 0%, 
+        rgba(255,255,255,0.1) 50%, 
+        rgba(255,255,255,0.03) 100%);
+}
+
+/* Legal back button */
+.legal-back .btn {
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+                background 0.3s ease,
+                border-color 0.3s ease;
+}
+
+.legal-back .btn:hover {
+    transform: translateX(-5px);
+}
+
+/* Course thumbnail — depth on hover */
+.course-thumb {
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.course-card:hover .course-thumb {
+    transform: scale(1.03);
+}
+
+/* Course thumb placeholder icon */
+.course-thumb-placeholder {
+    transition: color 0.5s ease,
+                transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.course-card:hover .course-thumb-placeholder {
+    transform: scale(1.1);
+}
+
+/* About pillars — staggered lift feel */
+.about-pillars:hover .pillar {
+    opacity: 0.6;
+}
+
+.about-pillars .pillar:hover {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.02);
+}
+
+.about-pillars .pillar {
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 0.4s ease,
+                border-color 0.4s ease;
+}
+
+/* Why grid — sibling dimming */
+.why-grid:hover .why-card {
+    opacity: 0.5;
+}
+
+.why-grid .why-card:hover {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.02);
+}
+
+.why-grid .why-card {
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 0.4s ease,
+                border-color 0.4s ease;
+}
+
+/* Testimonials grid — focus effect */
+.testimonials-grid:hover .testimonial-card {
+    opacity: 0.5;
+}
+
+.testimonials-grid .testimonial-card:hover {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.01);
+}
+
+.testimonials-grid .testimonial-card {
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 0.4s ease,
+                border-color 0.4s ease;
+}
+
+/* Contact channels — wave effect */
+.contact-channels:hover .contact-channel {
+    opacity: 0.5;
+}
+
+.contact-channels .contact-channel:hover {
+    opacity: 1;
+}
+
+.contact-channels .contact-channel {
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 0.4s ease,
+                border-color 0.4s ease,
+                box-shadow 0.5s ease;
+}
+
+/* Nav CTA — magnetic feel */
+.nav-cta {
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+                background 0.3s ease,
+                color 0.3s ease,
+                border-color 0.3s ease;
+}
+
+.nav-cta:hover {
+    transform: translateY(-1px);
+}
+
+/* Hero buttons — staggered lift */
+.hero-buttons .btn {
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+                box-shadow 0.4s ease,
+                background 0.3s ease;
+}
+
+.hero-buttons .btn:hover {
+    transform: translateY(-3px);
+}
+
+.hero-buttons .btn:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* Smooth text selection */
+::selection {
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2B2B2B;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3B3B3B;
 }
 
 /* ========================================
