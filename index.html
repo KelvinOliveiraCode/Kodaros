@@ -7,10 +7,13 @@
     <meta name="description" content="KODAROS desenvolve softwares premium e oferece cursos práticos em tecnologia e marketing digital.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- CANVAS BACKGROUND — GLOBAL -->
+    <canvas id="particle-canvas"></canvas>
 
     <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
@@ -40,29 +43,48 @@
     <section class="hero" id="inicio">
         <div class="hero-container">
             <div class="hero-content">
-                <span class="hero-label">Tecnologia • Software • Educação</span>
-                <h1 class="hero-title">Soluções inteligentes para empresas que desejam crescer.</h1>
+                <span class="hero-label" data-text="Tecnologia • Software • Educação">Tecnologia • Software • Educação</span>
+                <h1 class="hero-title">
+                    <span class="word-reveal">Soluções</span>
+                    <span class="word-reveal">inteligentes</span>
+                    <span class="word-reveal">para</span>
+                    <span class="word-reveal">empresas</span>
+                    <span class="word-reveal">que</span>
+                    <span class="word-reveal">desejam</span>
+                    <span class="word-reveal">crescer.</span>
+                </h1>
                 <p class="hero-subtitle">Desenvolvemos softwares modernos, oferecemos cursos práticos e criamos e-books exclusivos em tecnologia e marketing digital para acelerar resultados.</p>
                 <div class="hero-buttons">
-                    <a href="#softwares" class="btn btn-primary">Conhecer Softwares</a>
-                    <a href="#cursos" class="btn btn-secondary">Explorar Cursos</a>
+                    <a href="#softwares" class="btn btn-primary">
+                        <span>Conhecer Softwares</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                    <a href="https://kodaros01.hotmart.host/e-books" target="_blank" rel="noopener" class="btn btn-secondary">
+                        <span>Explorar E-books</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                    </a>
                 </div>
             </div>
             <div class="hero-visual">
                 <div class="hero-abstract">
+                    <div class="abstract-orb orb-1"></div>
+                    <div class="abstract-orb orb-2"></div>
+                    <div class="abstract-orb orb-3"></div>
+                    <div class="abstract-ring ring-1"></div>
+                    <div class="abstract-ring ring-2"></div>
+                    <div class="abstract-ring ring-3"></div>
                     <div class="abstract-line line-1"></div>
                     <div class="abstract-line line-2"></div>
                     <div class="abstract-line line-3"></div>
-                    <div class="abstract-glass glass-1"></div>
-                    <div class="abstract-glass glass-2"></div>
-                    <div class="abstract-glass glass-3"></div>
                     <div class="abstract-dot dot-1"></div>
                     <div class="abstract-dot dot-2"></div>
                     <div class="abstract-dot dot-3"></div>
-                    <div class="abstract-ring ring-1"></div>
-                    <div class="abstract-ring ring-2"></div>
+                    <div class="abstract-dot dot-4"></div>
                 </div>
             </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
         </div>
     </section>
 
@@ -75,25 +97,25 @@
                     <h2 class="section-title">Tecnologia de ponta para impulsionar o seu negócio.</h2>
                     <p class="section-desc">A KODAROS é uma empresa brasileira especializada no desenvolvimento de softwares premium, criação de conteúdos educacionais e publicação de e-books de alta qualidade. Nossa missão é transformar a maneira como empresas e profissionais utilizam a tecnologia.</p>
                     <div class="about-pillars">
-                        <div class="pillar">
+                        <div class="pillar" data-tilt>
                             <div class="pillar-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
                             </div>
                             <span>Desenvolvimento de Software</span>
                         </div>
-                        <div class="pillar">
+                        <div class="pillar" data-tilt>
                             <div class="pillar-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
                             </div>
                             <span>Tecnologia & Automação</span>
                         </div>
-                        <div class="pillar">
+                        <div class="pillar" data-tilt>
                             <div class="pillar-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                             </div>
                             <span>Marketing Digital</span>
                         </div>
-                        <div class="pillar">
+                        <div class="pillar" data-tilt>
                             <div class="pillar-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                             </div>
@@ -113,7 +135,8 @@
                 <h2 class="section-title">Nossos Softwares</h2>
                 <p class="section-desc">Soluções tecnológicas desenvolvidas com excelência para atender às necessidades do mercado.</p>
             </div>
-            <div class="em-breve-banner">
+            <div class="em-breve-banner" data-tilt>
+                <div class="em-breve-glow"></div>
                 <span class="em-breve-text">Em Breve</span>
                 <p class="em-breve-desc">Nossos softwares estão em desenvolvimento. Em breve você terá acesso às melhores soluções tecnológicas do mercado.</p>
             </div>
@@ -128,7 +151,8 @@
                 <h2 class="section-title">Nossos Cursos</h2>
                 <p class="section-desc">Conteúdo prático e de alta qualidade para você dominar as tecnologias do futuro.</p>
             </div>
-            <div class="em-breve-banner">
+            <div class="em-breve-banner" data-tilt>
+                <div class="em-breve-glow"></div>
                 <span class="em-breve-text">Em Breve</span>
                 <p class="em-breve-desc">Nossos cursos estão sendo preparados com conteúdo de alta qualidade. Fique atento para o lançamento.</p>
             </div>
@@ -143,11 +167,12 @@
                 <h2 class="section-title">Nossos E-books</h2>
                 <p class="section-desc">Materiais exclusivos com conhecimento prático e aplicável para impulsionar sua carreira e seu negócio.</p>
             </div>
-            <div class="ebooks-cta">
+            <div class="ebooks-cta" data-tilt>
+                <div class="ebooks-cta-glow"></div>
                 <p class="ebooks-cta-desc">Acesse nossa loja completa de e-books com conteúdos exclusivos em tecnologia, marketing digital e desenvolvimento pessoal.</p>
                 <a href="https://kodaros01.hotmart.host/e-books" target="_blank" rel="noopener" class="btn btn-primary btn-large">
-                    Acessar Loja de E-books
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                    <span>Acessar Loja de E-books</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
                 </a>
             </div>
         </div>
@@ -161,28 +186,28 @@
                 <h2 class="section-title">Por que escolher a KODAROS?</h2>
             </div>
             <div class="why-grid">
-                <div class="why-card">
+                <div class="why-card" data-tilt>
                     <div class="why-icon">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                     </div>
                     <h3>Tecnologia Moderna</h3>
                     <p>Utilizamos as ferramentas e frameworks mais avançados do mercado para entregar produtos de alta performance.</p>
                 </div>
-                <div class="why-card">
+                <div class="why-card" data-tilt>
                     <div class="why-icon">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
                     </div>
                     <h3>Soluções Escaláveis</h3>
                     <p>Arquiteturas pensadas para crescer junto com o seu negócio, sem limitações técnicas.</p>
                 </div>
-                <div class="why-card">
+                <div class="why-card" data-tilt>
                     <div class="why-icon">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     </div>
                     <h3>Experiência Premium</h3>
                     <p>Cada detalhe é cuidadosamente planejado para oferecer a melhor experiência possível ao usuário.</p>
                 </div>
-                <div class="why-card">
+                <div class="why-card" data-tilt>
                     <div class="why-icon">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
                     </div>
@@ -201,7 +226,7 @@
                 <h2 class="section-title">O que dizem sobre nós</h2>
             </div>
             <div class="testimonials-grid">
-                <div class="testimonial-card">
+                <div class="testimonial-card" data-tilt>
                     <div class="stars">★★★★★</div>
                     <p class="testimonial-text">"A plataforma trouxe muito mais organização para nossa rotina. A interface é intuitiva e os recursos são exatamente o que precisávamos."</p>
                     <div class="testimonial-author">
@@ -209,7 +234,7 @@
                         <span>Software Engineer</span>
                     </div>
                 </div>
-                <div class="testimonial-card">
+                <div class="testimonial-card" data-tilt>
                     <div class="stars">★★★★★</div>
                     <p class="testimonial-text">"Design extremamente limpo e ferramentas muito intuitivas. É raro encontrar uma empresa que combine estética e funcionalidade tão bem."</p>
                     <div class="testimonial-author">
@@ -217,7 +242,7 @@
                         <span>Product Designer</span>
                     </div>
                 </div>
-                <div class="testimonial-card">
+                <div class="testimonial-card" data-tilt>
                     <div class="stars">★★★★★</div>
                     <p class="testimonial-text">"Uma experiência premium do início ao fim. Desde o primeiro contato até a entrega final, tudo foi impecável."</p>
                     <div class="testimonial-author">
@@ -225,7 +250,7 @@
                         <span>Tech Lead</span>
                     </div>
                 </div>
-                <div class="testimonial-card">
+                <div class="testimonial-card" data-tilt>
                     <div class="stars">★★★★★</div>
                     <p class="testimonial-text">"Os conteúdos são claros e realmente aplicáveis. Consegui colocar em prática tudo que aprendi nos cursos da KODAROS."</p>
                     <div class="testimonial-author">
@@ -233,7 +258,7 @@
                         <span>Marketing Analyst</span>
                     </div>
                 </div>
-                <div class="testimonial-card">
+                <div class="testimonial-card" data-tilt>
                     <div class="stars">★★★★★</div>
                     <p class="testimonial-text">"A qualidade do suporte é impressionante. Sempre que precisei, a equipe respondeu com rapidez e soluções eficientes."</p>
                     <div class="testimonial-author">
@@ -241,7 +266,7 @@
                         <span>CEO</span>
                     </div>
                 </div>
-                <div class="testimonial-card">
+                <div class="testimonial-card" data-tilt>
                     <div class="stars">★★★★★</div>
                     <p class="testimonial-text">"Investimos em várias soluções antes, mas a KODAROS entregou exatamente o que prometeu. Resultados visíveis em pouco tempo."</p>
                     <div class="testimonial-author">
@@ -262,7 +287,7 @@
                 <p class="section-desc">Entre em contato conosco. Estamos prontos para ajudar o seu negócio a crescer.</p>
             </div>
             <div class="contact-channels">
-                <a href="https://wa.me/559192094504" target="_blank" rel="noopener" class="contact-channel">
+                <a href="https://wa.me/559192094504" target="_blank" rel="noopener" class="contact-channel" data-tilt>
                     <div class="channel-icon">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
                     </div>
@@ -271,7 +296,7 @@
                         <span class="channel-value">+55 91 9209-4504</span>
                     </div>
                 </a>
-                <a href="mailto:kodaros01@gmail.com" class="contact-channel">
+                <a href="mailto:kodaros01@gmail.com" class="contact-channel" data-tilt>
                     <div class="channel-icon">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
                     </div>
@@ -280,7 +305,7 @@
                         <span class="channel-value">kodaros01@gmail.com</span>
                     </div>
                 </a>
-                <a href="https://www.instagram.com/kodaros01" target="_blank" rel="noopener" class="contact-channel">
+                <a href="https://www.instagram.com/kodaros01" target="_blank" rel="noopener" class="contact-channel" data-tilt>
                     <div class="channel-icon">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><path d="M17.5 6.5h.01"/></svg>
                     </div>

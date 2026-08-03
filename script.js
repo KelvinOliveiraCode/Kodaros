@@ -1,6 +1,119 @@
-// KODAROS — Premium Landing Page JavaScript
+// KODAROS — Premium Landing Page JavaScript v2.0
+// Partículas, Tilt 3D, Smooth Scroll, Intersection Observer
 
 document.addEventListener('DOMContentLoaded', function() {
+    // ========================================
+    // PARTICLE CANVAS
+    // ========================================
+    const canvas = document.getElementById('particle-canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouseX = 0, mouseY = 0;
+        let isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.3 + 0.1;
+                this.pulse = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.pulse += 0.02;
+
+                // Mouse interaction
+                if (!isTouch) {
+                    const dx = mouseX - this.x;
+                    const dy = mouseY - this.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        const force = (150 - dist) / 150;
+                        this.x -= dx * force * 0.01;
+                        this.y -= dy * force * 0.01;
+                    }
+                }
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                const pulseOpacity = this.opacity + Math.sin(this.pulse) * 0.1;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, pulseOpacity)})`;
+                ctx.fill();
+            }
+        }
+
+        // Create particles
+        const particleCount = isTouch ? 30 : 60;
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        // Draw connections
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 120) {
+                        const opacity = (1 - dist / 120) * 0.06;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            drawConnections();
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        if (!isTouch) {
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+        }
+    }
+
     // ========================================
     // NAVBAR — RESPONSIVE HIDE/SHOW ON SCROLL
     // ========================================
@@ -16,20 +129,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const scrollDirection = scrollDelta > 0 ? 'down' : 'up';
         const scrollSpeed = Math.abs(scrollDelta);
 
-        // Add/remove scrolled background
         if (currentScrollY > 30) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
         }
 
-        // Responsive hide/show based on scroll direction and speed
         if (scrollDirection === 'down' && currentScrollY > 80 && scrollSpeed > 2) {
-            // Scrolling down fast — hide navbar
             navbar.classList.add('hidden');
             navbar.classList.remove('visible');
         } else if (scrollDirection === 'up') {
-            // Scrolling up — show navbar immediately
             navbar.classList.remove('hidden');
             navbar.classList.add('visible');
         }
@@ -38,7 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
         ticking = false;
     }
 
-    // Throttled scroll listener for performance
     window.addEventListener('scroll', () => {
         isScrolling = true;
         clearTimeout(scrollTimeout);
@@ -48,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
             ticking = true;
         }
 
-        // Detect scroll stop — show navbar when user stops scrolling
         scrollTimeout = setTimeout(() => {
             isScrolling = false;
             navbar.classList.remove('hidden');
@@ -67,12 +174,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (navToggle && navMenu) {
         navToggle.addEventListener('click', function() {
             navMenu.classList.toggle('active');
-
             const spans = navToggle.querySelectorAll('span');
             if (navMenu.classList.contains('active')) {
-                spans[0].style.transform = 'rotate(45deg) translate(4px, 4px)';
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
                 spans[1].style.opacity = '0';
-                spans[2].style.transform = 'rotate(-45deg) translate(4px, -4px)';
+                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
             } else {
                 spans[0].style.transform = 'none';
                 spans[1].style.opacity = '1';
@@ -114,22 +220,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ========================================
-    // SCROLL REVEAL ANIMATION (RESPONSIVE)
+    // SCROLL REVEAL ANIMATION
     // ========================================
     const revealElements = document.querySelectorAll(
-        '.section-header, .software-card, .course-card, .why-card, ' +
-        '.testimonial-card, .pillar, .contact-channel, .em-breve-banner'
+        '.section-header, .pillar, .why-card, ' +
+        '.testimonial-card, .contact-channel, .em-breve-banner, .ebooks-cta, .legal-section'
     );
 
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Staggered reveal based on element index within parent
                 const parent = entry.target.parentElement;
                 if (parent) {
                     const siblings = Array.from(parent.children);
                     const index = siblings.indexOf(entry.target);
-                    entry.target.style.transitionDelay = `${index * 0.06}s`;
+                    entry.target.style.transitionDelay = `${index * 0.08}s`;
                 }
                 entry.target.classList.add('active');
                 revealObserver.unobserve(entry.target);
@@ -137,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, {
         threshold: 0.08,
-        rootMargin: '0px 0px -40px 0px'
+        rootMargin: '0px 0px -50px 0px'
     });
 
     revealElements.forEach(el => {
@@ -157,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!heroScrollTicking) {
                 requestAnimationFrame(() => {
                     const scrolled = window.pageYOffset;
-                    const rate = scrolled * 0.12;
+                    const rate = scrolled * 0.1;
                     heroVisual.style.transform = `translateY(${rate}px)`;
                     heroScrollTicking = false;
                 });
@@ -178,8 +283,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let mouseTimeout;
 
         document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth - 0.5) * 16;
-            mouseY = (e.clientY / window.innerHeight - 0.5) * 16;
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
             mouseActive = true;
 
             clearTimeout(mouseTimeout);
@@ -190,8 +295,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function animateHeroParallax() {
             if (mouseActive) {
-                currentX += (mouseX - currentX) * 0.06;
-                currentY += (mouseY - currentY) * 0.06;
+                currentX += (mouseX - currentX) * 0.05;
+                currentY += (mouseY - currentY) * 0.05;
                 heroAbstract.style.transform = `translate(${currentX}px, ${currentY}px)`;
             }
             requestAnimationFrame(animateHeroParallax);
@@ -201,13 +306,43 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ========================================
+    // 3D TILT EFFECT
+    // ========================================
+    const tiltElements = document.querySelectorAll('[data-tilt]');
+
+    if (!window.matchMedia('(pointer: coarse)').matches) {
+        tiltElements.forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / centerY * -8;
+                const rotateY = (x - centerX) / centerX * 8;
+
+                el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`;
+            });
+
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
+                el.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+            });
+
+            el.addEventListener('mouseenter', () => {
+                el.style.transition = 'transform 0.1s ease';
+            });
+        });
+    }
+
+    // ========================================
     // NAVBAR LINK ACTIVE STATE
     // ========================================
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
 
     function setActiveLink() {
-        const scrollPos = window.pageYOffset + 200;
+        const scrollPos = window.pageYOffset + 250;
 
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
@@ -237,4 +372,72 @@ document.addEventListener('DOMContentLoaded', function() {
     }, { passive: true });
 
     setActiveLink();
+
+    // ========================================
+    // MAGNETIC BUTTON EFFECT
+    // ========================================
+    const magneticBtns = document.querySelectorAll('.btn, .nav-cta');
+
+    if (!window.matchMedia('(pointer: coarse)').matches) {
+        magneticBtns.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+                btn.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease, box-shadow 0.3s ease';
+            });
+
+            btn.addEventListener('mouseenter', () => {
+                btn.style.transition = 'transform 0.1s ease, background 0.3s ease, box-shadow 0.3s ease';
+            });
+        });
+    }
+
+    // ========================================
+    // CURSOR GLOW EFFECT (desktop only)
+    // ========================================
+    if (!window.matchMedia('(pointer: coarse)').matches) {
+        const cursorGlow = document.createElement('div');
+        cursorGlow.className = 'cursor-glow';
+        cursorGlow.style.cssText = `
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.015), transparent 70%);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        `;
+        document.body.appendChild(cursorGlow);
+
+        let glowX = 0, glowY = 0;
+        let currentGlowX = 0, currentGlowY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            glowX = e.clientX;
+            glowY = e.clientY;
+            cursorGlow.style.opacity = '1';
+        });
+
+        document.addEventListener('mouseleave', () => {
+            cursorGlow.style.opacity = '0';
+        });
+
+        function animateGlow() {
+            currentGlowX += (glowX - currentGlowX) * 0.08;
+            currentGlowY += (glowY - currentGlowY) * 0.08;
+            cursorGlow.style.left = currentGlowX + 'px';
+            cursorGlow.style.top = currentGlowY + 'px';
+            requestAnimationFrame(animateGlow);
+        }
+        animateGlow();
+    }
 });
