@@ -1,7 +1,30 @@
 /* ========================================
-   KODAROS — Premium Landing Page v2.1
-   Partículas globais | Fonte: Space Grotesk + Inter
+   KODAROS — Premium Landing Page v2.2
+   Correções: Acessibilidade, Performance, Variáveis CSS
    ======================================== */
+
+/* DESIGN TOKENS — Variáveis CSS */
+:root {
+    --color-bg: #050505;
+    --color-text-primary: #FFFFFF;
+    --color-text-muted: #8A8A8A;
+    --color-text-dim: #555555;
+    --color-border: rgba(255, 255, 255, 0.04);
+    --color-border-hover: rgba(255, 255, 255, 0.1);
+
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-fast: 0.1s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-slower: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+
+    --blur-light: blur(12px);
+    --blur-heavy: blur(32px);
+    --blur-card: blur(10px);
+}
 
 /* RESET & BASE */
 *, *::before, *::after {
@@ -16,10 +39,10 @@ html {
 }
 
 body {
-    font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-display), var(--font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 300;
-    color: #FFFFFF;
-    background-color: #050505;
+    color: var(--color-text-primary);
+    background-color: var(--color-bg);
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -29,7 +52,7 @@ body {
 a {
     color: inherit;
     text-decoration: none;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--transition-normal);
 }
 
 a:hover {
@@ -52,7 +75,7 @@ ul {
 }
 
 /* ========================================
-   PARTICLE CANVAS — GLOBAL (todas as seções)
+   PARTICLE CANVAS — GLOBAL
    ======================================== */
 #particle-canvas {
     position: fixed;
@@ -75,12 +98,11 @@ ul {
     right: 0;
     z-index: 1000;
     padding: 20px 0;
-    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-                background 0.4s ease,
-                padding 0.4s ease,
-                opacity 0.4s ease,
-                backdrop-filter 0.4s ease;
-    will-change: transform;
+    transition: transform var(--transition-slower),
+                background var(--transition-normal),
+                padding var(--transition-normal),
+                opacity var(--transition-normal),
+                backdrop-filter var(--transition-normal);
 }
 
 .navbar.hidden {
@@ -95,16 +117,17 @@ ul {
 
 .navbar.scrolled {
     background: rgba(5, 5, 5, 0.75);
-    backdrop-filter: blur(32px) saturate(1.4);
-    -webkit-backdrop-filter: blur(32px) saturate(1.4);
+    backdrop-filter: var(--blur-light) saturate(1.4);
+    -webkit-backdrop-filter: var(--blur-light) saturate(1.4);
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     padding: 14px 0;
+    will-change: transform;
 }
 
 .navbar-solid {
     background: rgba(5, 5, 5, 0.82);
-    backdrop-filter: blur(32px) saturate(1.4);
-    -webkit-backdrop-filter: blur(32px) saturate(1.4);
+    backdrop-filter: var(--blur-light) saturate(1.4);
+    -webkit-backdrop-filter: var(--blur-light) saturate(1.4);
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
@@ -120,7 +143,7 @@ ul {
 .nav-logo img {
     height: 38px;
     width: auto;
-    transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity var(--transition-normal), transform var(--transition-slower);
 }
 
 .nav-logo:hover img {
@@ -135,7 +158,7 @@ ul {
 }
 
 .nav-link {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 0.8125rem;
     font-weight: 400;
     color: #8A8A8A;
@@ -152,12 +175,12 @@ ul {
     left: 50%;
     width: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, #FFFFFF, transparent);
-    transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1), left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    background: linear-gradient(90deg, transparent, var(--color-text-primary), transparent);
+    transition: width var(--transition-slower), left var(--transition-slower);
 }
 
 .nav-link:hover {
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     opacity: 1;
 }
 
@@ -167,25 +190,25 @@ ul {
 }
 
 .nav-link.active {
-    color: #FFFFFF;
+    color: var(--color-text-primary);
 }
 
 .nav-link.active::after {
     width: 100%;
     left: 0;
-    background: #FFFFFF;
+    background: var(--color-text-primary);
 }
 
 .nav-cta {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 0.8125rem;
     font-weight: 500;
     padding: 11px 26px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 100px;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     letter-spacing: 0.03em;
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all var(--transition-slower);
     position: relative;
     overflow: hidden;
 }
@@ -202,9 +225,9 @@ ul {
 }
 
 .nav-cta:hover {
-    background: #FFFFFF;
-    color: #050505;
-    border-color: #FFFFFF;
+    background: var(--color-text-primary);
+    color: var(--color-bg);
+    border-color: var(--color-text-primary);
     opacity: 1;
     transform: translateY(-1px);
     box-shadow: 0 8px 32px rgba(255,255,255,0.08);
@@ -228,8 +251,8 @@ ul {
     display: block;
     width: 22px;
     height: 1.5px;
-    background: #FFFFFF;
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    background: var(--color-text-primary);
+    transition: all var(--transition-slower);
     border-radius: 2px;
 }
 
@@ -241,21 +264,21 @@ ul {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 0.875rem;
     font-weight: 500;
     letter-spacing: 0.02em;
     padding: 15px 32px;
     border-radius: 100px;
     cursor: pointer;
-    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all var(--transition-slower);
     border: none;
     position: relative;
     overflow: hidden;
 }
 
 .btn svg {
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform var(--transition-slower);
 }
 
 .btn:hover svg {
@@ -263,8 +286,8 @@ ul {
 }
 
 .btn-primary {
-    background: #FFFFFF;
-    color: #050505;
+    background: var(--color-text-primary);
+    color: var(--color-bg);
 }
 
 .btn-primary::before {
@@ -291,7 +314,7 @@ ul {
 
 .btn-secondary {
     background: transparent;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
@@ -332,7 +355,7 @@ ul {
 }
 
 .hero-content {
-    animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: fadeInUp 1.2s var(--ease-out-expo) forwards;
     opacity: 0;
     position: relative;
     z-index: 2;
@@ -340,7 +363,7 @@ ul {
 
 .hero-label {
     display: inline-block;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 0.6875rem;
     font-weight: 500;
     letter-spacing: 0.2em;
@@ -360,24 +383,24 @@ ul {
     color: #888888;
     overflow: hidden;
     white-space: nowrap;
-    animation: textReveal 2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    animation: textReveal 2s var(--ease-out-expo) 0.5s forwards;
 }
 
 .hero-title {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(2.5rem, 5.5vw, 4.2rem);
     font-weight: 300;
     line-height: 1.1;
     letter-spacing: -0.04em;
     margin-bottom: 28px;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
 }
 
 .hero-title .word-reveal {
     display: inline-block;
     opacity: 0;
     transform: translateY(40px);
-    animation: wordReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: wordReveal 0.8s var(--ease-out-expo) forwards;
 }
 
 .hero-title .word-reveal:nth-child(1) { animation-delay: 0.3s; }
@@ -389,15 +412,15 @@ ul {
 .hero-title .word-reveal:nth-child(7) { animation-delay: 1.02s; }
 
 .hero-subtitle {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 1.125rem;
     font-weight: 300;
-    color: #7A7A7A;
+    color: var(--color-text-muted);
     line-height: 1.7;
     max-width: 480px;
     margin-bottom: 44px;
     opacity: 0;
-    animation: fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1) 1.2s forwards;
+    animation: fadeInUp 1s var(--ease-out-expo) 1.2s forwards;
 }
 
 .hero-buttons {
@@ -405,7 +428,7 @@ ul {
     gap: 16px;
     flex-wrap: wrap;
     opacity: 0;
-    animation: fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1) 1.5s forwards;
+    animation: fadeInUp 1s var(--ease-out-expo) 1.5s forwards;
 }
 
 /* Scroll Indicator */
@@ -445,7 +468,7 @@ ul {
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: fadeIn 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    animation: fadeIn 1.4s var(--ease-out-expo) 0.5s forwards;
     opacity: 0;
 }
 
@@ -462,7 +485,7 @@ ul {
     border-radius: 50%;
     filter: blur(60px);
     opacity: 0;
-    animation: orbAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: orbAppear 1.5s var(--ease-out-expo) forwards;
 }
 
 .orb-1 {
@@ -471,7 +494,7 @@ ul {
     top: 10%;
     right: 15%;
     background: radial-gradient(circle, rgba(255,255,255,0.04), transparent 70%);
-    animation: orbAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards, orbFloat 8s ease-in-out infinite 2s;
+    animation: orbAppear 1.5s var(--ease-out-expo) 0.3s forwards, orbFloat 8s ease-in-out infinite 2s;
 }
 
 .orb-2 {
@@ -480,7 +503,7 @@ ul {
     bottom: 15%;
     left: 10%;
     background: radial-gradient(circle, rgba(255,255,255,0.03), transparent 70%);
-    animation: orbAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards, orbFloat 10s ease-in-out infinite 2.5s;
+    animation: orbAppear 1.5s var(--ease-out-expo) 0.6s forwards, orbFloat 10s ease-in-out infinite 2.5s;
 }
 
 .orb-3 {
@@ -489,7 +512,7 @@ ul {
     top: 50%;
     left: 45%;
     background: radial-gradient(circle, rgba(255,255,255,0.025), transparent 70%);
-    animation: orbAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards, orbFloat 7s ease-in-out infinite 3s;
+    animation: orbAppear 1.5s var(--ease-out-expo) 0.9s forwards, orbFloat 7s ease-in-out infinite 3s;
 }
 
 /* Rings */
@@ -498,7 +521,7 @@ ul {
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 50%;
     opacity: 0;
-    animation: ringAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: ringAppear 1.5s var(--ease-out-expo) forwards;
 }
 
 .ring-1 {
@@ -506,7 +529,7 @@ ul {
     height: 300px;
     top: 5%;
     left: 15%;
-    animation: ringAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards, rotate 40s linear infinite;
+    animation: ringAppear 1.5s var(--ease-out-expo) 0.4s forwards, rotate 40s linear infinite;
 }
 
 .ring-2 {
@@ -514,7 +537,7 @@ ul {
     height: 220px;
     bottom: 10%;
     right: 20%;
-    animation: ringAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards, rotate 30s linear infinite reverse;
+    animation: ringAppear 1.5s var(--ease-out-expo) 0.7s forwards, rotate 30s linear infinite reverse;
 }
 
 .ring-3 {
@@ -522,7 +545,7 @@ ul {
     height: 160px;
     top: 40%;
     left: 40%;
-    animation: ringAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) 1s forwards, rotate 25s linear infinite;
+    animation: ringAppear 1.5s var(--ease-out-expo) 1s forwards, rotate 25s linear infinite;
 }
 
 /* Lines */
@@ -532,7 +555,7 @@ ul {
     height: 1px;
     border-radius: 100px;
     opacity: 0;
-    animation: lineAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: lineAppear 1.5s var(--ease-out-expo) forwards;
 }
 
 .line-1 {
@@ -540,7 +563,7 @@ ul {
     top: 25%;
     left: 5%;
     transform: rotate(-12deg);
-    animation: lineAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards, lineFloat 7s ease-in-out infinite 2s;
+    animation: lineAppear 1.5s var(--ease-out-expo) 0.5s forwards, lineFloat 7s ease-in-out infinite 2s;
 }
 
 .line-2 {
@@ -548,7 +571,7 @@ ul {
     top: 65%;
     right: 10%;
     transform: rotate(20deg);
-    animation: lineAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards, lineFloat 9s ease-in-out infinite 2.5s;
+    animation: lineAppear 1.5s var(--ease-out-expo) 0.8s forwards, lineFloat 9s ease-in-out infinite 2.5s;
 }
 
 .line-3 {
@@ -556,7 +579,7 @@ ul {
     bottom: 30%;
     left: 25%;
     transform: rotate(-25deg);
-    animation: lineAppear 1.5s cubic-bezier(0.22, 1, 0.36, 1) 1.1s forwards, lineFloat 6s ease-in-out infinite 3s;
+    animation: lineAppear 1.5s var(--ease-out-expo) 1.1s forwards, lineFloat 6s ease-in-out infinite 3s;
 }
 
 /* Dots */
@@ -576,18 +599,18 @@ ul {
 .dot-4 { top: 45%; right: 40%; animation-delay: 1.5s; animation: dotAppear 1s ease 1.5s forwards, dotPulse 4.5s ease-in-out infinite 3.5s; }
 
 /* ========================================
-   SECTIONS GENERAL — Fundo transparente para ver partículas
+   SECTIONS GENERAL
    ======================================== */
 .section-label {
     display: inline-block;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 0.6875rem;
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: #444444;
     margin-bottom: 18px;
-    transition: letter-spacing 0.5s cubic-bezier(0.22, 1, 0.36, 1), color 0.5s ease;
+    transition: letter-spacing var(--transition-slower), color 0.5s ease;
 }
 
 .section-header:hover .section-label {
@@ -596,20 +619,20 @@ ul {
 }
 
 .section-title {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(2rem, 4.5vw, 3.2rem);
     font-weight: 300;
     line-height: 1.15;
     letter-spacing: -0.03em;
     margin-bottom: 18px;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
 }
 
 .section-desc {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 1.0625rem;
     font-weight: 300;
-    color: #6A6A6A;
+    color: var(--color-text-muted);
     line-height: 1.7;
     max-width: 560px;
 }
@@ -624,7 +647,7 @@ ul {
 }
 
 /* ========================================
-   ABOUT — Fundo transparente
+   ABOUT
    ======================================== */
 .about {
     padding: 140px 0;
@@ -662,9 +685,9 @@ ul {
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.04);
     background: rgba(255, 255, 255, 0.015);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    backdrop-filter: var(--blur-card);
+    -webkit-backdrop-filter: var(--blur-card);
+    transition: all var(--transition-slower);
     position: relative;
     overflow: hidden;
     transform-style: preserve-3d;
@@ -683,7 +706,7 @@ ul {
 }
 
 .pillar:hover {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-border-hover);
     transform: translateY(-8px) scale(1.02);
     background: rgba(255, 255, 255, 0.03);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
@@ -700,19 +723,19 @@ ul {
     align-items: center;
     justify-content: center;
     color: #7A7A7A;
-    transition: color 0.4s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: color 0.4s ease, transform var(--transition-slower);
 }
 
 .pillar:hover .pillar-icon {
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     transform: scale(1.1);
 }
 
 .pillar span {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.8125rem;
     font-weight: 300;
-    color: #6A6A6A;
+    color: var(--color-text-muted);
     text-align: center;
     transition: color 0.4s ease;
 }
@@ -722,7 +745,7 @@ ul {
 }
 
 /* ========================================
-   SOFTWARE — Fundo transparente
+   SOFTWARE
    ======================================== */
 .software {
     padding: 140px 0;
@@ -738,11 +761,11 @@ ul {
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.04);
     background: rgba(255, 255, 255, 0.01);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: var(--blur-card);
+    -webkit-backdrop-filter: var(--blur-card);
     position: relative;
     overflow: hidden;
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all var(--transition-slower);
     transform-style: preserve-3d;
 }
 
@@ -782,12 +805,12 @@ ul {
 
 .em-breve-text {
     display: inline-block;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 0.6875rem;
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     padding: 10px 24px;
     border-radius: 100px;
     background: rgba(255, 255, 255, 0.05);
@@ -798,10 +821,10 @@ ul {
 }
 
 .em-breve-desc {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.9375rem;
     font-weight: 300;
-    color: #555555;
+    color: var(--color-text-muted);
     line-height: 1.7;
     max-width: 480px;
     margin: 0 auto;
@@ -810,7 +833,7 @@ ul {
 }
 
 /* ========================================
-   COURSES — Fundo transparente
+   COURSES
    ======================================== */
 .courses {
     padding: 140px 0;
@@ -821,12 +844,12 @@ ul {
 
 .courses .em-breve-banner {
     background: rgba(255, 255, 255, 0.005);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: var(--blur-card);
+    -webkit-backdrop-filter: var(--blur-card);
 }
 
 /* ========================================
-   E-BOOKS — Fundo transparente
+   E-BOOKS
    ======================================== */
 .ebooks {
     padding: 140px 0;
@@ -837,8 +860,8 @@ ul {
 
 .ebooks .em-breve-banner {
     background: rgba(255, 255, 255, 0.01);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: var(--blur-card);
+    -webkit-backdrop-filter: var(--blur-card);
 }
 
 .ebooks-cta {
@@ -847,11 +870,11 @@ ul {
     border-radius: 28px;
     border: 1px solid rgba(255, 255, 255, 0.04);
     background: rgba(255, 255, 255, 0.008);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: var(--blur-card);
+    -webkit-backdrop-filter: var(--blur-card);
     max-width: 640px;
     margin: 0 auto;
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all var(--transition-slower);
     position: relative;
     overflow: hidden;
     transform-style: preserve-3d;
@@ -881,10 +904,10 @@ ul {
 }
 
 .ebooks-cta-desc {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 300;
-    color: #6A6A6A;
+    color: var(--color-text-muted);
     line-height: 1.7;
     margin-bottom: 36px;
     max-width: 440px;
@@ -904,7 +927,7 @@ ul {
 }
 
 .ebooks-cta .btn svg {
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform var(--transition-slower);
 }
 
 .ebooks-cta .btn:hover svg {
@@ -912,7 +935,7 @@ ul {
 }
 
 /* ========================================
-   WHY CHOOSE US — Fundo transparente
+   WHY CHOOSE US
    ======================================== */
 .why-us {
     padding: 140px 0;
@@ -932,9 +955,9 @@ ul {
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.04);
     background: rgba(255, 255, 255, 0.01);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    backdrop-filter: var(--blur-card);
+    -webkit-backdrop-filter: var(--blur-card);
+    transition: all var(--transition-slower);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -954,7 +977,7 @@ ul {
 }
 
 .why-card:hover {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-border-hover);
     transform: translateY(-8px) scale(1.02);
     background: rgba(255, 255, 255, 0.02);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
@@ -974,36 +997,36 @@ ul {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.05);
     margin: 0 auto 22px;
-    color: #6A6A6A;
-    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    color: var(--color-text-muted);
+    transition: all var(--transition-slower);
 }
 
 .why-card:hover .why-icon {
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(255, 255, 255, 0.1);
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     transform: scale(1.1);
 }
 
 .why-card h3 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 1rem;
     font-weight: 500;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     margin-bottom: 12px;
     letter-spacing: -0.01em;
 }
 
 .why-card p {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 300;
-    color: #555555;
+    color: var(--color-text-muted);
     line-height: 1.6;
 }
 
 /* ========================================
-   TESTIMONIALS — Fundo transparente
+   TESTIMONIALS
    ======================================== */
 .testimonials {
     padding: 140px 0;
@@ -1023,9 +1046,9 @@ ul {
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.04);
     background: rgba(255, 255, 255, 0.01);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    backdrop-filter: var(--blur-card);
+    -webkit-backdrop-filter: var(--blur-card);
+    transition: all var(--transition-slower);
     position: relative;
     overflow: hidden;
     transform-style: preserve-3d;
@@ -1044,7 +1067,7 @@ ul {
 }
 
 .testimonial-card:hover {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-border-hover);
     transform: translateY(-8px) scale(1.01);
     background: rgba(255, 255, 255, 0.02);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
@@ -1056,10 +1079,10 @@ ul {
 
 .stars {
     font-size: 0.875rem;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     letter-spacing: 2px;
     margin-bottom: 20px;
-    transition: letter-spacing 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+    transition: letter-spacing var(--transition-slower), opacity 0.5s ease;
 }
 
 .testimonial-card:hover .stars {
@@ -1068,10 +1091,10 @@ ul {
 }
 
 .testimonial-text {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.9375rem;
     font-weight: 300;
-    color: #7A7A7A;
+    color: var(--color-text-muted);
     line-height: 1.7;
     margin-bottom: 28px;
     font-style: italic;
@@ -1079,22 +1102,22 @@ ul {
 
 .testimonial-author strong {
     display: block;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 0.9375rem;
     font-weight: 500;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     margin-bottom: 3px;
 }
 
 .testimonial-author span {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.8125rem;
     font-weight: 300;
     color: #444444;
 }
 
 /* ========================================
-   CONTACT — Fundo transparente
+   CONTACT
    ======================================== */
 .contact {
     padding: 140px 0;
@@ -1121,9 +1144,9 @@ ul {
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.04);
     background: rgba(255, 255, 255, 0.01);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    backdrop-filter: var(--blur-card);
+    -webkit-backdrop-filter: var(--blur-card);
+    transition: all var(--transition-slower);
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -1164,14 +1187,14 @@ ul {
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    color: #6A6A6A;
-    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    color: var(--color-text-muted);
+    transition: all var(--transition-slower);
 }
 
 .contact-channel:hover .channel-icon {
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(255, 255, 255, 0.12);
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     transform: scale(1.12);
 }
 
@@ -1182,7 +1205,7 @@ ul {
 }
 
 .channel-label {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 0.6875rem;
     font-weight: 500;
     letter-spacing: 0.15em;
@@ -1191,15 +1214,15 @@ ul {
 }
 
 .channel-value {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 1rem;
     font-weight: 400;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     letter-spacing: -0.01em;
 }
 
 /* ========================================
-   FOOTER — Fundo transparente
+   FOOTER
    ======================================== */
 .footer {
     padding: 90px 0 40px;
@@ -1224,7 +1247,7 @@ ul {
     height: 32px;
     width: auto;
     margin-bottom: 20px;
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+    transition: transform var(--transition-slower), opacity var(--transition-normal);
 }
 
 .footer-brand:hover .footer-logo {
@@ -1232,7 +1255,7 @@ ul {
 }
 
 .footer-brand p {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 300;
     color: #444444;
@@ -1246,10 +1269,10 @@ ul {
 }
 
 .footer-col h4 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 0.75rem;
     font-weight: 500;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 22px;
@@ -1262,16 +1285,16 @@ ul {
 }
 
 .footer-col a {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 300;
     color: #444444;
-    transition: color 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: color 0.35s ease, transform var(--transition-slower);
     display: inline-block;
 }
 
 .footer-col a:hover {
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     opacity: 1;
     transform: translateX(4px);
 }
@@ -1297,14 +1320,14 @@ ul {
 }
 
 .footer-bottom p {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.8125rem;
     font-weight: 300;
     color: #2A2A2A;
 }
 
 /* ========================================
-   LEGAL PAGES — Fundo transparente
+   LEGAL PAGES
    ======================================== */
 .legal-page {
     padding: 180px 0 100px;
@@ -1320,17 +1343,17 @@ ul {
 }
 
 .legal-header h1 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(2rem, 4.5vw, 3.2rem);
     font-weight: 300;
     line-height: 1.15;
     letter-spacing: -0.03em;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     margin-bottom: 14px;
 }
 
 .legal-date {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 300;
     color: #444444;
@@ -1345,7 +1368,7 @@ ul {
     margin-bottom: 52px;
     opacity: 0;
     transform: translateY(30px);
-    animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: fadeInUp 0.8s var(--ease-out-expo) forwards;
 }
 
 .legal-section:nth-child(1) { animation-delay: 0.1s; }
@@ -1358,19 +1381,19 @@ ul {
 .legal-section:nth-child(8) { animation-delay: 0.8s; }
 
 .legal-section h2 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 1.25rem;
     font-weight: 500;
-    color: #FFFFFF;
+    color: var(--color-text-primary);
     margin-bottom: 18px;
     letter-spacing: -0.01em;
 }
 
 .legal-section p {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.9375rem;
     font-weight: 300;
-    color: #6A6A6A;
+    color: var(--color-text-muted);
     line-height: 1.8;
     margin-bottom: 14px;
 }
@@ -1381,10 +1404,10 @@ ul {
 }
 
 .legal-section li {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.9375rem;
     font-weight: 300;
-    color: #6A6A6A;
+    color: var(--color-text-muted);
     line-height: 1.8;
     margin-bottom: 8px;
 }
@@ -1395,9 +1418,9 @@ ul {
 }
 
 .legal-back .btn {
-    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-                background 0.3s ease,
-                border-color 0.3s ease;
+    transition: transform var(--transition-slower),
+                background var(--transition-normal),
+                border-color var(--transition-normal);
 }
 
 .legal-back .btn:hover {
@@ -1405,7 +1428,7 @@ ul {
 }
 
 .legal-back .btn svg {
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform var(--transition-slower);
 }
 
 .legal-back .btn:hover svg {
@@ -1511,7 +1534,7 @@ ul {
 .reveal {
     opacity: 0;
     transform: translateY(50px);
-    transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all 1s var(--ease-out-expo);
 }
 
 .reveal.active {
@@ -1522,7 +1545,7 @@ ul {
 /* Smooth text selection */
 ::selection {
     background: rgba(255, 255, 255, 0.12);
-    color: #FFFFFF;
+    color: var(--color-text-primary);
 }
 
 /* Scrollbar styling */
@@ -1531,7 +1554,7 @@ ul {
 }
 
 ::-webkit-scrollbar-track {
-    background: #050505;
+    background: var(--color-bg);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -1555,7 +1578,7 @@ ul {
 }
 
 .about-pillars .pillar {
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transition: transform var(--transition-slower),
                 opacity 0.5s ease,
                 border-color 0.5s ease,
                 background 0.5s ease,
@@ -1571,7 +1594,7 @@ ul {
 }
 
 .why-grid .why-card {
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transition: transform var(--transition-slower),
                 opacity 0.5s ease,
                 border-color 0.5s ease,
                 background 0.5s ease,
@@ -1587,7 +1610,7 @@ ul {
 }
 
 .testimonials-grid .testimonial-card {
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transition: transform var(--transition-slower),
                 opacity 0.5s ease,
                 border-color 0.5s ease,
                 background 0.5s ease,
@@ -1603,11 +1626,26 @@ ul {
 }
 
 .contact-channels .contact-channel {
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transition: transform var(--transition-slower),
                 opacity 0.5s ease,
                 border-color 0.5s ease,
                 background 0.5s ease,
                 box-shadow 0.5s ease;
+}
+
+/* ========================================
+   PREFERS-REDUCED-MOTION — Acessibilidade
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    #particle-canvas, .cursor-glow, .hero-abstract, .scroll-indicator {
+        display: none !important;
+    }
 }
 
 /* ========================================

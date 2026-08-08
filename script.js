@@ -1,20 +1,38 @@
-// KODAROS — Premium Landing Page JavaScript v2.0
-// Partículas, Tilt 3D, Smooth Scroll, Intersection Observer
+// KODAROS — Premium Landing Page JavaScript v2.2
+// Correções: Page Visibility API, HiDPI Canvas, Shadowing, Modularização
 
 document.addEventListener('DOMContentLoaded', function() {
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+    let isTabActive = true;
+
     // ========================================
-    // PARTICLE CANVAS
+    // PAGE VISIBILITY API — Controle global de rAF
     // ========================================
-    const canvas = document.getElementById('particle-canvas');
-    if (canvas) {
+    document.addEventListener('visibilitychange', () => {
+        isTabActive = !document.hidden;
+    });
+
+    // ========================================
+    // MÓDULO: PARTICLE CANVAS (com HiDPI)
+    // ========================================
+    (function initParticles() {
+        const canvas = document.getElementById('particle-canvas');
+        if (!canvas) return;
+
         const ctx = canvas.getContext('2d');
         let particles = [];
         let mouseX = 0, mouseY = 0;
-        let isTouch = window.matchMedia('(pointer: coarse)').matches;
+        let dpr = window.devicePixelRatio || 1;
+        let animId = null;
 
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
         }
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
@@ -23,23 +41,20 @@ document.addEventListener('DOMContentLoaded', function() {
             constructor() {
                 this.reset();
             }
-
             reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
                 this.size = Math.random() * 1.5 + 0.5;
                 this.speedX = (Math.random() - 0.5) * 0.3;
                 this.speedY = (Math.random() - 0.5) * 0.3;
                 this.opacity = Math.random() * 0.3 + 0.1;
                 this.pulse = Math.random() * Math.PI * 2;
             }
-
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
                 this.pulse += 0.02;
 
-                // Mouse interaction
                 if (!isTouch) {
                     const dx = mouseX - this.x;
                     const dy = mouseY - this.y;
@@ -51,11 +66,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
 
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                if (this.x < 0 || this.x > window.innerWidth || this.y < 0 || this.y > window.innerHeight) {
                     this.reset();
                 }
             }
-
             draw() {
                 const pulseOpacity = this.opacity + Math.sin(this.pulse) * 0.1;
                 ctx.beginPath();
@@ -65,13 +79,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Create particles
         const particleCount = isTouch ? 30 : 60;
         for (let i = 0; i < particleCount; i++) {
             particles.push(new Particle());
         }
 
-        // Draw connections
         function drawConnections() {
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
@@ -93,15 +105,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
+            if (!isTabActive) {
+                animId = requestAnimationFrame(animateParticles);
+                return;
+            }
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            particles.forEach(p => { p.update(); p.draw(); });
             drawConnections();
-            requestAnimationFrame(animateParticles);
+            animId = requestAnimationFrame(animateParticles);
         }
 
         animateParticles();
@@ -112,155 +123,159 @@ document.addEventListener('DOMContentLoaded', function() {
                 mouseY = e.clientY;
             });
         }
-    }
+    })();
 
     // ========================================
-    // NAVBAR — RESPONSIVE HIDE/SHOW ON SCROLL
+    // MÓDULO: NAVBAR
     // ========================================
-    const navbar = document.getElementById('navbar');
-    let lastScrollY = window.pageYOffset;
-    let ticking = false;
-    let scrollTimeout;
-    let isScrolling = false;
+    (function initNavbar() {
+        const navbar = document.getElementById('navbar');
+        if (!navbar) return;
 
-    function handleNavbarScroll() {
-        const currentScrollY = window.pageYOffset;
-        const scrollDelta = currentScrollY - lastScrollY;
-        const scrollDirection = scrollDelta > 0 ? 'down' : 'up';
-        const scrollSpeed = Math.abs(scrollDelta);
+        let lastScrollY = window.pageYOffset;
+        let ticking = false;
+        let scrollTimeout;
 
-        if (currentScrollY > 30) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
+        function handleNavbarScroll() {
+            const currentScrollY = window.pageYOffset;
+            const scrollDelta = currentScrollY - lastScrollY;
+            const scrollDirection = scrollDelta > 0 ? 'down' : 'up';
+            const scrollSpeed = Math.abs(scrollDelta);
 
-        if (scrollDirection === 'down' && currentScrollY > 80 && scrollSpeed > 2) {
-            navbar.classList.add('hidden');
-            navbar.classList.remove('visible');
-        } else if (scrollDirection === 'up') {
-            navbar.classList.remove('hidden');
-            navbar.classList.add('visible');
-        }
-
-        lastScrollY = currentScrollY;
-        ticking = false;
-    }
-
-    window.addEventListener('scroll', () => {
-        isScrolling = true;
-        clearTimeout(scrollTimeout);
-
-        if (!ticking) {
-            requestAnimationFrame(handleNavbarScroll);
-            ticking = true;
-        }
-
-        scrollTimeout = setTimeout(() => {
-            isScrolling = false;
-            navbar.classList.remove('hidden');
-            navbar.classList.add('visible');
-        }, 150);
-    }, { passive: true });
-
-    handleNavbarScroll();
-
-    // ========================================
-    // MOBILE MENU TOGGLE
-    // ========================================
-    const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.querySelector('.nav-menu');
-
-    if (navToggle && navMenu) {
-        navToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
-            const spans = navToggle.querySelectorAll('span');
-            if (navMenu.classList.contains('active')) {
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-                spans[1].style.opacity = '0';
-                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+            if (currentScrollY > 30) {
+                navbar.classList.add('scrolled');
             } else {
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
+                navbar.classList.remove('scrolled');
             }
-        });
 
-        navMenu.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
+            if (scrollDirection === 'down' && currentScrollY > 80 && scrollSpeed > 2) {
+                navbar.classList.add('hidden');
+                navbar.classList.remove('visible');
+            } else if (scrollDirection === 'up') {
+                navbar.classList.remove('hidden');
+                navbar.classList.add('visible');
+            }
+
+            lastScrollY = currentScrollY;
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            if (!ticking) {
+                requestAnimationFrame(handleNavbarScroll);
+                ticking = true;
+            }
+            scrollTimeout = setTimeout(() => {
+                navbar.classList.remove('hidden');
+                navbar.classList.add('visible');
+            }, 150);
+        }, { passive: true });
+
+        handleNavbarScroll();
+
+        // Mobile menu
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
                 const spans = navToggle.querySelectorAll('span');
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
+                if (navMenu.classList.contains('active')) {
+                    spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                    spans[1].style.opacity = '0';
+                    spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+                } else {
+                    spans[0].style.transform = 'none';
+                    spans[1].style.opacity = '1';
+                    spans[2].style.transform = 'none';
+                }
+            });
+            navMenu.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    const spans = navToggle.querySelectorAll('span');
+                    spans[0].style.transform = 'none';
+                    spans[1].style.opacity = '1';
+                    spans[2].style.transform = 'none';
+                });
+            });
+        }
+    })();
+
+    // ========================================
+    // MÓDULO: SMOOTH SCROLL
+    // ========================================
+    (function initSmoothScroll() {
+        const navbar = document.getElementById('navbar');
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    const navHeight = navbar ? navbar.offsetHeight : 0;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                }
             });
         });
-    }
+    })();
 
     // ========================================
-    // SMOOTH SCROLL FOR ANCHOR LINKS
+    // MÓDULO: SCROLL REVEAL
     // ========================================
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href === '#') return;
+    (function initScrollReveal() {
+        const revealElements = document.querySelectorAll(
+            '.section-header, .pillar, .why-card, ' +
+            '.testimonial-card, .contact-channel, .em-breve-banner, .ebooks-cta, .legal-section'
+        );
 
-            const target = document.querySelector(href);
-            if (target) {
-                e.preventDefault();
-                const navHeight = navbar.offsetHeight;
-                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
-
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // ========================================
-    // SCROLL REVEAL ANIMATION
-    // ========================================
-    const revealElements = document.querySelectorAll(
-        '.section-header, .pillar, .why-card, ' +
-        '.testimonial-card, .contact-channel, .em-breve-banner, .ebooks-cta, .legal-section'
-    );
-
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const parent = entry.target.parentElement;
-                if (parent) {
-                    const siblings = Array.from(parent.children);
-                    const index = siblings.indexOf(entry.target);
-                    entry.target.style.transitionDelay = `${index * 0.08}s`;
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const parent = entry.target.parentElement;
+                    if (parent) {
+                        const siblings = Array.from(parent.children).filter(
+                            child => child.classList.contains('pillar') ||
+                                     child.classList.contains('why-card') ||
+                                     child.classList.contains('testimonial-card') ||
+                                     child.classList.contains('contact-channel') ||
+                                     child.classList.contains('legal-section') ||
+                                     child.classList.contains('em-breve-banner') ||
+                                     child.classList.contains('ebooks-cta')
+                        );
+                        const index = siblings.indexOf(entry.target);
+                        entry.target.style.transitionDelay = `${index * 0.08}s`;
+                    }
+                    entry.target.classList.add('active');
+                    revealObserver.unobserve(entry.target);
                 }
-                entry.target.classList.add('active');
-                revealObserver.unobserve(entry.target);
-            }
+            });
+        }, {
+            threshold: 0.08,
+            rootMargin: '0px 0px -50px 0px'
         });
-    }, {
-        threshold: 0.08,
-        rootMargin: '0px 0px -50px 0px'
-    });
 
-    revealElements.forEach(el => {
-        el.classList.add('reveal');
-        revealObserver.observe(el);
-    });
+        revealElements.forEach(el => {
+            el.classList.add('reveal');
+            revealObserver.observe(el);
+        });
+    })();
 
     // ========================================
-    // PARALLAX EFFECT FOR HERO
+    // MÓDULO: PARALLAX HERO (com rAF controlado)
     // ========================================
-    const heroVisual = document.querySelector('.hero-visual');
+    (function initHeroParallax() {
+        const heroVisual = document.querySelector('.hero-visual');
+        if (!heroVisual || isTouch) return;
 
-    if (heroVisual && !window.matchMedia('(pointer: coarse)').matches) {
         let heroScrollTicking = false;
-
         window.addEventListener('scroll', () => {
             if (!heroScrollTicking) {
                 requestAnimationFrame(() => {
+                    if (!isTabActive) return;
                     const scrolled = window.pageYOffset;
                     const rate = scrolled * 0.1;
                     heroVisual.style.transform = `translateY(${rate}px)`;
@@ -269,48 +284,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 heroScrollTicking = true;
             }
         }, { passive: true });
-    }
+    })();
 
     // ========================================
-    // MOUSE PARALLAX FOR HERO ABSTRACT
+    // MÓDULO: MOUSE PARALLAX HERO (shadowing corrigido)
     // ========================================
-    const heroAbstract = document.querySelector('.hero-abstract');
+    (function initHeroMouseParallax() {
+        const heroAbstract = document.querySelector('.hero-abstract');
+        if (!heroAbstract || isTouch) return;
 
-    if (heroAbstract && !window.matchMedia('(pointer: coarse)').matches) {
-        let mouseX = 0, mouseY = 0;
+        let heroMouseX = 0, heroMouseY = 0;
         let currentX = 0, currentY = 0;
         let mouseActive = false;
         let mouseTimeout;
+        let animId = null;
 
         document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
-            mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
+            heroMouseX = (e.clientX / window.innerWidth - 0.5) * 20;
+            heroMouseY = (e.clientY / window.innerHeight - 0.5) * 20;
             mouseActive = true;
-
             clearTimeout(mouseTimeout);
-            mouseTimeout = setTimeout(() => {
-                mouseActive = false;
-            }, 100);
+            mouseTimeout = setTimeout(() => { mouseActive = false; }, 100);
         });
 
         function animateHeroParallax() {
-            if (mouseActive) {
-                currentX += (mouseX - currentX) * 0.05;
-                currentY += (mouseY - currentY) * 0.05;
+            if (isTabActive && mouseActive) {
+                currentX += (heroMouseX - currentX) * 0.05;
+                currentY += (heroMouseY - currentY) * 0.05;
                 heroAbstract.style.transform = `translate(${currentX}px, ${currentY}px)`;
             }
-            requestAnimationFrame(animateHeroParallax);
+            animId = requestAnimationFrame(animateHeroParallax);
         }
-
         animateHeroParallax();
-    }
+    })();
 
     // ========================================
-    // 3D TILT EFFECT
+    // MÓDULO: 3D TILT EFFECT
     // ========================================
-    const tiltElements = document.querySelectorAll('[data-tilt]');
+    (function initTilt() {
+        if (isTouch) return;
+        const tiltElements = document.querySelectorAll('[data-tilt]');
 
-    if (!window.matchMedia('(pointer: coarse)').matches) {
         tiltElements.forEach(el => {
             el.addEventListener('mousemove', (e) => {
                 const rect = el.getBoundingClientRect();
@@ -333,52 +347,53 @@ document.addEventListener('DOMContentLoaded', function() {
                 el.style.transition = 'transform 0.1s ease';
             });
         });
-    }
+    })();
 
     // ========================================
-    // NAVBAR LINK ACTIVE STATE
+    // MÓDULO: NAVBAR ACTIVE LINKS
     // ========================================
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
+    (function initActiveLinks() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
 
-    function setActiveLink() {
-        const scrollPos = window.pageYOffset + 250;
-
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-
-            if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${sectionId}`) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-        });
-    }
-
-    let activeLinkTicking = false;
-    window.addEventListener('scroll', () => {
-        if (!activeLinkTicking) {
-            requestAnimationFrame(() => {
-                setActiveLink();
-                activeLinkTicking = false;
+        function setActiveLink() {
+            const scrollPos = window.pageYOffset + 250;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
             });
-            activeLinkTicking = true;
         }
-    }, { passive: true });
 
-    setActiveLink();
+        let activeLinkTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!activeLinkTicking) {
+                requestAnimationFrame(() => {
+                    setActiveLink();
+                    activeLinkTicking = false;
+                });
+                activeLinkTicking = true;
+            }
+        }, { passive: true });
+
+        setActiveLink();
+    })();
 
     // ========================================
-    // MAGNETIC BUTTON EFFECT
+    // MÓDULO: MAGNETIC BUTTONS
     // ========================================
-    const magneticBtns = document.querySelectorAll('.btn, .nav-cta');
+    (function initMagnetic() {
+        if (isTouch) return;
+        const magneticBtns = document.querySelectorAll('.btn, .nav-cta');
 
-    if (!window.matchMedia('(pointer: coarse)').matches) {
         magneticBtns.forEach(btn => {
             btn.addEventListener('mousemove', (e) => {
                 const rect = btn.getBoundingClientRect();
@@ -396,12 +411,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 btn.style.transition = 'transform 0.1s ease, background 0.3s ease, box-shadow 0.3s ease';
             });
         });
-    }
+    })();
 
     // ========================================
-    // CURSOR GLOW EFFECT (desktop only)
+    // MÓDULO: CURSOR GLOW (com visibility control)
     // ========================================
-    if (!window.matchMedia('(pointer: coarse)').matches) {
+    (function initCursorGlow() {
+        if (isTouch) return;
+
         const cursorGlow = document.createElement('div');
         cursorGlow.className = 'cursor-glow';
         cursorGlow.style.cssText = `
@@ -420,24 +437,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let glowX = 0, glowY = 0;
         let currentGlowX = 0, currentGlowY = 0;
+        let mouseInWindow = false;
+        let animId = null;
 
         document.addEventListener('mousemove', (e) => {
             glowX = e.clientX;
             glowY = e.clientY;
+            mouseInWindow = true;
             cursorGlow.style.opacity = '1';
         });
 
         document.addEventListener('mouseleave', () => {
+            mouseInWindow = false;
             cursorGlow.style.opacity = '0';
         });
 
+        document.addEventListener('mouseenter', () => {
+            mouseInWindow = true;
+        });
+
         function animateGlow() {
-            currentGlowX += (glowX - currentGlowX) * 0.08;
-            currentGlowY += (glowY - currentGlowY) * 0.08;
-            cursorGlow.style.left = currentGlowX + 'px';
-            cursorGlow.style.top = currentGlowY + 'px';
-            requestAnimationFrame(animateGlow);
+            if (isTabActive && mouseInWindow) {
+                currentGlowX += (glowX - currentGlowX) * 0.08;
+                currentGlowY += (glowY - currentGlowY) * 0.08;
+                cursorGlow.style.left = currentGlowX + 'px';
+                cursorGlow.style.top = currentGlowY + 'px';
+            }
+            animId = requestAnimationFrame(animateGlow);
         }
         animateGlow();
-    }
+    })();
 });
