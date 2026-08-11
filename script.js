@@ -1,128 +1,204 @@
-// KODAROS — Premium Landing Page JavaScript v2.2
-// Correções: Page Visibility API, HiDPI Canvas, Shadowing, Modularização
+// KODAROS — Premium Landing Page JavaScript v3.2
+// Efeito: Waves infinitas | Scroll contínuo | Bordas sempre fora da tela
 
 document.addEventListener('DOMContentLoaded', function() {
     const isTouch = window.matchMedia('(pointer: coarse)').matches;
     let isTabActive = true;
 
-    // ========================================
-    // PAGE VISIBILITY API — Controle global de rAF
-    // ========================================
     document.addEventListener('visibilitychange', () => {
         isTabActive = !document.hidden;
     });
 
     // ========================================
-    // MÓDULO: PARTICLE CANVAS (com HiDPI)
+    // MÓDULO: WAVES CANVAS — VERSÃO FINAL
     // ========================================
-    (function initParticles() {
+    (function initWaves() {
         const canvas = document.getElementById('particle-canvas');
         if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouseX = 0, mouseY = 0;
         let dpr = window.devicePixelRatio || 1;
+        let width, height;
+        let lines = [];
+        let time = 0;
         let animId = null;
+        let scrollY = 0;
+        let smoothScrollY = 0;
 
-        function resizeCanvas() {
+        const mouse = { x: -9999, y: -9999, set: false };
+
+        const config = {
+            lineColor: 'rgba(255, 255, 255, 0.10)',
+            waveSpeedX: 0.012,
+            waveSpeedY: 0.008,
+            waveAmpX: 65,
+            waveAmpY: 35,
+            friction: 0.92,
+            tension: 0.008,
+            maxCursorMove: 120,
+            xGap: 14,
+            yGap: 32,
+            extraMargin: 200,      // pixels extras fora da tela em cada direção
+            scrollSmooth: 0.06     // fator de suavização do scroll
+        };
+
+        function resize() {
             dpr = window.devicePixelRatio || 1;
-            canvas.width = window.innerWidth * dpr;
-            canvas.height = window.innerHeight * dpr;
-            canvas.style.width = window.innerWidth + 'px';
-            canvas.style.height = window.innerHeight + 'px';
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.scale(dpr, dpr);
+            initLines();
         }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
 
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * window.innerWidth;
-                this.y = Math.random() * window.innerHeight;
-                this.size = Math.random() * 1.5 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.3;
-                this.speedY = (Math.random() - 0.5) * 0.3;
-                this.opacity = Math.random() * 0.3 + 0.1;
-                this.pulse = Math.random() * Math.PI * 2;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.pulse += 0.02;
+        function initLines() {
+            lines = [];
+            // Calcular quantas linhas são necessárias para cobrir a viewport + margens extras
+            // As margens extras garantem que as bordas nunca apareçam
+            const totalHeight = height + config.extraMargin * 2;
+            const totalWidth = width + config.extraMargin * 2;
+            const numLines = Math.ceil(totalHeight / config.yGap) + 4;
+            const numPoints = Math.ceil(totalWidth / config.xGap) + 4;
 
-                if (!isTouch) {
-                    const dx = mouseX - this.x;
-                    const dy = mouseY - this.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 150) {
-                        const force = (150 - dist) / 150;
-                        this.x -= dx * force * 0.01;
-                        this.y -= dy * force * 0.01;
-                    }
+            for (let i = 0; i < numLines; i++) {
+                const line = [];
+                // Posicionar linhas começando ANTES da tela (negativo)
+                const baseY = -config.extraMargin + i * config.yGap;
+                for (let j = 0; j < numPoints; j++) {
+                    // Posicionar pontos começando ANTES da tela (negativo)
+                    const baseX = -config.extraMargin + j * config.xGap;
+                    line.push({
+                        x: baseX,
+                        y: baseY,
+                        bx: baseX,
+                        by: baseY,
+                        vx: 0,
+                        vy: 0
+                    });
                 }
-
-                if (this.x < 0 || this.x > window.innerWidth || this.y < 0 || this.y > window.innerHeight) {
-                    this.reset();
-                }
-            }
-            draw() {
-                const pulseOpacity = this.opacity + Math.sin(this.pulse) * 0.1;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, pulseOpacity)})`;
-                ctx.fill();
+                lines.push(line);
             }
         }
 
-        const particleCount = isTouch ? 30 : 60;
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
+        function updateMouse(e) {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+            mouse.set = true;
         }
 
-        function drawConnections() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < 120) {
-                        const opacity = (1 - dist / 120) * 0.06;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.stroke();
-                    }
-                }
-            }
+        function resetMouse() {
+            mouse.x = -9999;
+            mouse.y = -9999;
+            mouse.set = false;
         }
 
-        function animateParticles() {
+        function animate() {
             if (!isTabActive) {
-                animId = requestAnimationFrame(animateParticles);
+                animId = requestAnimationFrame(animate);
                 return;
             }
-            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-            particles.forEach(p => { p.update(); p.draw(); });
-            drawConnections();
-            animId = requestAnimationFrame(animateParticles);
+
+            // Suavizar o scroll
+            smoothScrollY += (scrollY - smoothScrollY) * config.scrollSmooth;
+
+            time += 1;
+            ctx.clearRect(0, 0, width, height);
+
+            // Atualizar e desenhar pontos
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                if (line.length < 2) continue;
+
+                ctx.beginPath();
+
+                for (let j = 0; j < line.length; j++) {
+                    const p = line[j];
+
+                    // Ondas base
+                    const waveX = Math.sin(p.by * 0.004 + time * config.waveSpeedX) * config.waveAmpX
+                                  + Math.cos(p.by * 0.0025 + time * config.waveSpeedX * 0.6) * (config.waveAmpX * 0.4);
+                    const waveY = Math.cos(p.bx * 0.004 + time * config.waveSpeedY) * config.waveAmpY
+                                  + Math.sin(p.bx * 0.0025 + time * config.waveSpeedY * 0.6) * (config.waveAmpY * 0.4);
+
+                    // Interação com mouse
+                    let mouseForceX = 0;
+                    let mouseForceY = 0;
+                    const dx = mouse.x - p.x;
+                    const dy = mouse.y - (p.y - smoothScrollY);
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < config.maxCursorMove && dist > 0) {
+                        const force = (1 - dist / config.maxCursorMove);
+                        const angle = Math.atan2(dy, dx);
+                        mouseForceX = -Math.cos(angle) * force * config.maxCursorMove * 0.5;
+                        mouseForceY = -Math.sin(angle) * force * config.maxCursorMove * 0.5;
+                    }
+
+                    // Posição alvo com scroll
+                    const targetX = p.bx + waveX + mouseForceX;
+                    const targetY = p.by + waveY + mouseForceY;
+
+                    // Física de mola
+                    const ax = (targetX - p.x) * config.tension;
+                    const ay = (targetY - p.y) * config.tension;
+
+                    p.vx += ax;
+                    p.vy += ay;
+                    p.vx *= config.friction;
+                    p.vy *= config.friction;
+
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    // Desenhar ponto (aplicando o offset de scroll aqui)
+                    const drawX = p.x;
+                    const drawY = p.y - smoothScrollY;
+
+                    if (j === 0) {
+                        ctx.moveTo(drawX, drawY);
+                    } else {
+                        const prev = line[j - 1];
+                        const prevX = prev.x;
+                        const prevY = prev.y - smoothScrollY;
+                        const cx = (prevX + drawX) / 2;
+                        const cy = (prevY + drawY) / 2;
+                        ctx.quadraticCurveTo(prevX, prevY, cx, cy);
+                    }
+                }
+
+                // Fechar a linha até o último ponto
+                const last = line[line.length - 1];
+                ctx.lineTo(last.x, last.y - smoothScrollY);
+
+                ctx.strokeStyle = config.lineColor;
+                ctx.lineWidth = 1;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.stroke();
+            }
+
+            animId = requestAnimationFrame(animate);
         }
 
-        animateParticles();
+        // Scroll handler — atualiza o target do scroll
+        window.addEventListener('scroll', () => {
+            scrollY = window.pageYOffset;
+        }, { passive: true });
+
+        window.addEventListener('resize', resize);
 
         if (!isTouch) {
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
+            document.addEventListener('mousemove', updateMouse);
+            document.addEventListener('mouseleave', resetMouse);
         }
+
+        resize();
+        animate();
     })();
 
     // ========================================
@@ -174,7 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         handleNavbarScroll();
 
-        // Mobile menu
         const navToggle = document.querySelector('.nav-toggle');
         const navMenu = document.querySelector('.nav-menu');
         if (navToggle && navMenu) {
@@ -265,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })();
 
     // ========================================
-    // MÓDULO: PARALLAX HERO (com rAF controlado)
+    // MÓDULO: PARALLAX HERO
     // ========================================
     (function initHeroParallax() {
         const heroVisual = document.querySelector('.hero-visual');
@@ -287,17 +362,16 @@ document.addEventListener('DOMContentLoaded', function() {
     })();
 
     // ========================================
-    // MÓDULO: MOUSE PARALLAX HERO (shadowing corrigido)
+    // MÓDULO: MOUSE PARALLAX HERO
     // ========================================
     (function initHeroMouseParallax() {
-        const heroAbstract = document.querySelector('.hero-abstract');
-        if (!heroAbstract || isTouch) return;
+        const heroIcon = document.querySelector('.hero-icon-svg');
+        if (!heroIcon || isTouch) return;
 
         let heroMouseX = 0, heroMouseY = 0;
         let currentX = 0, currentY = 0;
         let mouseActive = false;
         let mouseTimeout;
-        let animId = null;
 
         document.addEventListener('mousemove', (e) => {
             heroMouseX = (e.clientX / window.innerWidth - 0.5) * 20;
@@ -311,9 +385,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isTabActive && mouseActive) {
                 currentX += (heroMouseX - currentX) * 0.05;
                 currentY += (heroMouseY - currentY) * 0.05;
-                heroAbstract.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                heroIcon.style.transform = `translate(${currentX}px, ${currentY}px)`;
             }
-            animId = requestAnimationFrame(animateHeroParallax);
+            requestAnimationFrame(animateHeroParallax);
         }
         animateHeroParallax();
     })();
@@ -414,7 +488,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })();
 
     // ========================================
-    // MÓDULO: CURSOR GLOW (com visibility control)
+    // MÓDULO: CURSOR GLOW
     // ========================================
     (function initCursorGlow() {
         if (isTouch) return;
@@ -438,7 +512,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let glowX = 0, glowY = 0;
         let currentGlowX = 0, currentGlowY = 0;
         let mouseInWindow = false;
-        let animId = null;
 
         document.addEventListener('mousemove', (e) => {
             glowX = e.clientX;
@@ -463,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 cursorGlow.style.left = currentGlowX + 'px';
                 cursorGlow.style.top = currentGlowY + 'px';
             }
-            animId = requestAnimationFrame(animateGlow);
+            requestAnimationFrame(animateGlow);
         }
         animateGlow();
     })();

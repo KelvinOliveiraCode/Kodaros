@@ -1,6 +1,6 @@
 /* ========================================
-   KODAROS — Premium Landing Page v2.2
-   Correções: Acessibilidade, Performance, Variáveis CSS
+   KODAROS — Premium Landing Page v3.0
+   Atualizações: Figtree font, SVG logos, waves scroll, glass effect
    ======================================== */
 
 /* DESIGN TOKENS — Variáveis CSS */
@@ -12,8 +12,8 @@
     --color-border: rgba(255, 255, 255, 0.04);
     --color-border-hover: rgba(255, 255, 255, 0.1);
 
-    --font-display: 'Space Grotesk', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --font-display: 'Figtree', sans-serif;
+    --font-body: 'Figtree', sans-serif;
 
     --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
     --transition-fast: 0.1s ease;
@@ -39,7 +39,7 @@ html {
 }
 
 body {
-    font-family: var(--font-display), var(--font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-display), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 300;
     color: var(--color-text-primary);
     background-color: var(--color-bg);
@@ -82,10 +82,10 @@ ul {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 1;
 }
 
 /* ========================================
@@ -461,7 +461,7 @@ ul {
     animation: scrollPulse 2s ease-in-out infinite;
 }
 
-/* Hero Visual */
+/* Hero Visual — Ícone SVG */
 .hero-visual {
     position: relative;
     height: 520px;
@@ -472,131 +472,26 @@ ul {
     opacity: 0;
 }
 
-.hero-abstract {
-    position: relative;
+.hero-icon-svg {
     width: 100%;
-    height: 100%;
-    perspective: 1000px;
+    max-width: 420px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: iconFloat 6s ease-in-out infinite;
 }
 
-/* Orbs */
-.abstract-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0;
-    animation: orbAppear 1.5s var(--ease-out-expo) forwards;
+.hero-icon-img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 60px rgba(255,255,255,0.04));
+    transition: filter 0.5s ease;
 }
 
-.orb-1 {
-    width: 280px;
-    height: 280px;
-    top: 10%;
-    right: 15%;
-    background: radial-gradient(circle, rgba(255,255,255,0.04), transparent 70%);
-    animation: orbAppear 1.5s var(--ease-out-expo) 0.3s forwards, orbFloat 8s ease-in-out infinite 2s;
+.hero-icon-svg:hover .hero-icon-img {
+    filter: drop-shadow(0 0 80px rgba(255,255,255,0.08));
 }
-
-.orb-2 {
-    width: 200px;
-    height: 200px;
-    bottom: 15%;
-    left: 10%;
-    background: radial-gradient(circle, rgba(255,255,255,0.03), transparent 70%);
-    animation: orbAppear 1.5s var(--ease-out-expo) 0.6s forwards, orbFloat 10s ease-in-out infinite 2.5s;
-}
-
-.orb-3 {
-    width: 150px;
-    height: 150px;
-    top: 50%;
-    left: 45%;
-    background: radial-gradient(circle, rgba(255,255,255,0.025), transparent 70%);
-    animation: orbAppear 1.5s var(--ease-out-expo) 0.9s forwards, orbFloat 7s ease-in-out infinite 3s;
-}
-
-/* Rings */
-.abstract-ring {
-    position: absolute;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 50%;
-    opacity: 0;
-    animation: ringAppear 1.5s var(--ease-out-expo) forwards;
-}
-
-.ring-1 {
-    width: 300px;
-    height: 300px;
-    top: 5%;
-    left: 15%;
-    animation: ringAppear 1.5s var(--ease-out-expo) 0.4s forwards, rotate 40s linear infinite;
-}
-
-.ring-2 {
-    width: 220px;
-    height: 220px;
-    bottom: 10%;
-    right: 20%;
-    animation: ringAppear 1.5s var(--ease-out-expo) 0.7s forwards, rotate 30s linear infinite reverse;
-}
-
-.ring-3 {
-    width: 160px;
-    height: 160px;
-    top: 40%;
-    left: 40%;
-    animation: ringAppear 1.5s var(--ease-out-expo) 1s forwards, rotate 25s linear infinite;
-}
-
-/* Lines */
-.abstract-line {
-    position: absolute;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
-    height: 1px;
-    border-radius: 100px;
-    opacity: 0;
-    animation: lineAppear 1.5s var(--ease-out-expo) forwards;
-}
-
-.line-1 {
-    width: 200px;
-    top: 25%;
-    left: 5%;
-    transform: rotate(-12deg);
-    animation: lineAppear 1.5s var(--ease-out-expo) 0.5s forwards, lineFloat 7s ease-in-out infinite 2s;
-}
-
-.line-2 {
-    width: 160px;
-    top: 65%;
-    right: 10%;
-    transform: rotate(20deg);
-    animation: lineAppear 1.5s var(--ease-out-expo) 0.8s forwards, lineFloat 9s ease-in-out infinite 2.5s;
-}
-
-.line-3 {
-    width: 120px;
-    bottom: 30%;
-    left: 25%;
-    transform: rotate(-25deg);
-    animation: lineAppear 1.5s var(--ease-out-expo) 1.1s forwards, lineFloat 6s ease-in-out infinite 3s;
-}
-
-/* Dots */
-.abstract-dot {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.25);
-    opacity: 0;
-    animation: dotAppear 1s ease forwards;
-}
-
-.dot-1 { top: 15%; left: 35%; animation-delay: 0.6s; animation: dotAppear 1s ease 0.6s forwards, dotPulse 4s ease-in-out infinite 2s; }
-.dot-2 { top: 75%; right: 25%; animation-delay: 0.9s; animation: dotAppear 1s ease 0.9s forwards, dotPulse 5s ease-in-out infinite 2.5s; }
-.dot-3 { bottom: 25%; left: 55%; animation-delay: 1.2s; animation: dotAppear 1s ease 1.2s forwards, dotPulse 3.5s ease-in-out infinite 3s; }
-.dot-4 { top: 45%; right: 40%; animation-delay: 1.5s; animation: dotAppear 1s ease 1.5s forwards, dotPulse 4.5s ease-in-out infinite 3.5s; }
 
 /* ========================================
    SECTIONS GENERAL
@@ -754,15 +649,17 @@ ul {
     z-index: 1;
 }
 
-/* EM BREVE BANNER */
+/* EM BREVE BANNER — mesma proporção da ebooks-cta */
 .em-breve-banner {
     text-align: center;
-    padding: 56px 40px;
-    border-radius: 24px;
+    padding: 64px 48px;
+    border-radius: 28px;
     border: 1px solid rgba(255, 255, 255, 0.04);
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(255, 255, 255, 0.005);
     backdrop-filter: var(--blur-card);
     -webkit-backdrop-filter: var(--blur-card);
+    max-width: 640px;
+    margin: 0 auto;
     position: relative;
     overflow: hidden;
     transition: all var(--transition-slower);
@@ -773,8 +670,8 @@ ul {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     background: radial-gradient(circle, rgba(255,255,255,0.04), transparent 70%);
     transform: translate(-50%, -50%);
     opacity: 0;
@@ -822,11 +719,11 @@ ul {
 
 .em-breve-desc {
     font-family: var(--font-body);
-    font-size: 0.9375rem;
+    font-size: 1rem;
     font-weight: 300;
     color: var(--color-text-muted);
     line-height: 1.7;
-    max-width: 480px;
+    max-width: 440px;
     margin: 0 auto;
     position: relative;
     z-index: 1;
@@ -859,7 +756,7 @@ ul {
 }
 
 .ebooks .em-breve-banner {
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(255, 255, 255, 0.005);
     backdrop-filter: var(--blur-card);
     -webkit-backdrop-filter: var(--blur-card);
 }
@@ -869,7 +766,7 @@ ul {
     padding: 64px 48px;
     border-radius: 28px;
     border: 1px solid rgba(255, 255, 255, 0.04);
-    background: rgba(255, 255, 255, 0.008);
+    background: rgba(255, 255, 255, 0.005);
     backdrop-filter: var(--blur-card);
     -webkit-backdrop-filter: var(--blur-card);
     max-width: 640px;
@@ -954,7 +851,7 @@ ul {
     padding: 44px 28px;
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.04);
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(255, 255, 255, 0.005);
     backdrop-filter: var(--blur-card);
     -webkit-backdrop-filter: var(--blur-card);
     transition: all var(--transition-slower);
@@ -979,7 +876,7 @@ ul {
 .why-card:hover {
     border-color: var(--color-border-hover);
     transform: translateY(-8px) scale(1.02);
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.015);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
@@ -1045,7 +942,7 @@ ul {
     padding: 40px 28px;
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.04);
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(255, 255, 255, 0.005);
     backdrop-filter: var(--blur-card);
     -webkit-backdrop-filter: var(--blur-card);
     transition: all var(--transition-slower);
@@ -1069,7 +966,7 @@ ul {
 .testimonial-card:hover {
     border-color: var(--color-border-hover);
     transform: translateY(-8px) scale(1.01);
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.015);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
@@ -1143,7 +1040,7 @@ ul {
     padding: 52px 32px;
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.04);
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(255, 255, 255, 0.005);
     backdrop-filter: var(--blur-card);
     -webkit-backdrop-filter: var(--blur-card);
     transition: all var(--transition-slower);
@@ -1168,7 +1065,7 @@ ul {
 .contact-channel:hover {
     border-color: rgba(255, 255, 255, 0.12);
     transform: translateY(-10px) scale(1.02);
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.015);
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5),
                 0 0 0 1px rgba(255, 255, 255, 0.05);
     opacity: 1;
@@ -1470,54 +1367,11 @@ ul {
     to { width: 100%; }
 }
 
-@keyframes orbAppear {
-    from { opacity: 0; transform: scale(0.5); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes orbFloat {
-    0%, 100% { transform: translate(0, 0); }
-    25% { transform: translate(10px, -15px); }
-    50% { transform: translate(-5px, 10px); }
-    75% { transform: translate(15px, 5px); }
-}
-
-@keyframes ringAppear {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes lineAppear {
-    from { opacity: 0; width: 0; }
-    to { opacity: 1; width: var(--w, 200px); }
-}
-
-.line-1 { --w: 200px; }
-.line-2 { --w: 160px; }
-.line-3 { --w: 120px; }
-
-@keyframes lineFloat {
-    0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
-    50% { transform: translateY(-12px) rotate(var(--r, 0deg)); }
-}
-
-.line-1 { --r: -12deg; }
-.line-2 { --r: 20deg; }
-.line-3 { --r: -25deg; }
-
-@keyframes dotAppear {
-    from { opacity: 0; transform: scale(0); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes dotPulse {
-    0%, 100% { opacity: 0.2; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(1.8); }
-}
-
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-12px) rotate(1deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(12px) rotate(-1deg); }
 }
 
 @keyframes shimmer {
@@ -1643,7 +1497,7 @@ ul {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
-    #particle-canvas, .cursor-glow, .hero-abstract, .scroll-indicator {
+    #particle-canvas, .cursor-glow, .hero-icon-svg, .scroll-indicator {
         display: none !important;
     }
 }
@@ -1673,6 +1527,10 @@ ul {
 
     .hero-buttons {
         justify-content: center;
+    }
+
+    .hero-icon-svg {
+        max-width: 280px;
     }
 
     .contact-channels {
@@ -1753,7 +1611,7 @@ ul {
     }
 
     .em-breve-banner {
-        padding: 40px 28px;
+        padding: 44px 28px;
     }
 
     .ebooks-cta {
@@ -1798,5 +1656,9 @@ ul {
 
     .hero-visual {
         height: 280px;
+    }
+
+    .hero-icon-svg {
+        max-width: 220px;
     }
 }
