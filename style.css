@@ -5,12 +5,23 @@
 
 /* DESIGN TOKENS — Variáveis CSS */
 :root {
-    --color-bg: #050505;
+    --color-bg: #05050D;
     --color-text-primary: #FFFFFF;
-    --color-text-muted: #8A8A8A;
-    --color-text-dim: #555555;
-    --color-border: rgba(255, 255, 255, 0.04);
-    --color-border-hover: rgba(255, 255, 255, 0.1);
+    --color-text-muted: #A0A0B8;
+    --color-text-dim: #5A5A70;
+    --color-border: rgba(255, 255, 255, 0.06);
+    --color-border-hover: rgba(255, 255, 255, 0.14);
+
+    --color-accent: #8B5CF6;        /* violeta */
+    --color-accent-2: #22D3EE;      /* ciano */
+    --color-accent-3: #F472B6;      /* rosa */
+    --color-accent-soft: rgba(139, 92, 246, 0.35);
+
+    --gradient-primary: linear-gradient(135deg, #8B5CF6 0%, #6366F1 50%, #22D3EE 100%);
+    --gradient-text: linear-gradient(92deg, #C4B5FD 0%, #818CF8 50%, #67E8F9 100%);
+    --glow-primary: 0 0 0 1px rgba(139, 92, 246, 0.25),
+                    0 12px 40px rgba(124, 58, 237, 0.28),
+                    0 24px 80px rgba(34, 211, 238, 0.12);
 
     --font-display: 'Figtree', sans-serif;
     --font-body: 'Figtree', sans-serif;
@@ -23,7 +34,7 @@
 
     --blur-light: blur(12px);
     --blur-heavy: blur(32px);
-    --blur-card: blur(10px);
+    --blur-card: blur(14px);
 }
 
 /* RESET & BASE */
@@ -43,6 +54,11 @@ body {
     font-weight: 300;
     color: var(--color-text-primary);
     background-color: var(--color-bg);
+    background-image:
+        radial-gradient(1100px 750px at 85% -10%, rgba(124, 58, 237, 0.22), transparent 62%),
+        radial-gradient(900px 650px at 0% 25%, rgba(34, 211, 238, 0.10), transparent 55%),
+        radial-gradient(1000px 700px at 55% 110%, rgba(236, 72, 153, 0.12), transparent 60%);
+    background-attachment: fixed;
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -116,19 +132,20 @@ ul {
 }
 
 .navbar.scrolled {
-    background: rgba(5, 5, 5, 0.75);
+    background: rgba(6, 6, 16, 0.72);
     backdrop-filter: var(--blur-light) saturate(1.4);
     -webkit-backdrop-filter: var(--blur-light) saturate(1.4);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.18);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
     padding: 14px 0;
     will-change: transform;
 }
 
 .navbar-solid {
-    background: rgba(5, 5, 5, 0.82);
+    background: rgba(6, 6, 16, 0.82);
     backdrop-filter: var(--blur-light) saturate(1.4);
     -webkit-backdrop-filter: var(--blur-light) saturate(1.4);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.18);
 }
 
 .nav-container {
@@ -202,12 +219,15 @@ ul {
 .nav-cta {
     font-family: var(--font-display);
     font-size: 0.8125rem;
-    font-weight: 500;
+    font-weight: 600;
     padding: 11px 26px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: none;
     border-radius: 100px;
-    color: var(--color-text-primary);
+    color: #FFFFFF;
     letter-spacing: 0.03em;
+    background: var(--gradient-primary);
+    background-size: 180% 180%;
+    box-shadow: 0 6px 24px rgba(124, 58, 237, 0.35);
     transition: all var(--transition-slower);
     position: relative;
     overflow: hidden;
@@ -220,17 +240,15 @@ ul {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
     transition: left 0.6s ease;
 }
 
 .nav-cta:hover {
-    background: var(--color-text-primary);
-    color: var(--color-bg);
-    border-color: var(--color-text-primary);
+    background-position: 100% 100%;
     opacity: 1;
     transform: translateY(-1px);
-    box-shadow: 0 8px 32px rgba(255,255,255,0.08);
+    box-shadow: 0 10px 36px rgba(139, 92, 246, 0.5);
 }
 
 .nav-cta:hover::before {
@@ -286,8 +304,10 @@ ul {
 }
 
 .btn-primary {
-    background: var(--color-text-primary);
-    color: var(--color-bg);
+    background: var(--gradient-primary);
+    background-size: 180% 180%;
+    color: #FFFFFF;
+    box-shadow: 0 10px 32px rgba(124, 58, 237, 0.35);
 }
 
 .btn-primary::before {
@@ -297,14 +317,14 @@ ul {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.04), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
     transition: left 0.6s ease;
 }
 
 .btn-primary:hover {
-    background: #F0F0F0;
+    background-position: 100% 100%;
     transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(255, 255, 255, 0.12);
+    box-shadow: var(--glow-primary);
     opacity: 1;
 }
 
@@ -313,16 +333,31 @@ ul {
 }
 
 .btn-secondary {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.04);
     color: var(--color-text-primary);
     border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: var(--blur-card);
+    -webkit-backdrop-filter: var(--blur-card);
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(139, 92, 246, 0.14);
+    border-color: rgba(139, 92, 246, 0.55);
+    box-shadow: 0 12px 36px rgba(124, 58, 237, 0.25);
     transform: translateY(-3px);
     opacity: 1;
+}
+
+/* Botão desabilitado — usado nos produtos ainda não lançados */
+.btn:disabled,
+.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: none;
 }
 
 .btn:active {
@@ -365,10 +400,11 @@ ul {
     display: inline-block;
     font-family: var(--font-display);
     font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
+    font-weight: 600;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #555555;
+    color: #A78BFA;
+    text-shadow: 0 0 24px rgba(139, 92, 246, 0.45);
     margin-bottom: 28px;
     position: relative;
     overflow: hidden;
@@ -380,7 +416,7 @@ ul {
     top: 0;
     left: 0;
     width: 0;
-    color: #888888;
+    color: #67E8F9;
     overflow: hidden;
     white-space: nowrap;
     animation: textReveal 2s var(--ease-out-expo) 0.5s forwards;
@@ -410,6 +446,14 @@ ul {
 .hero-title .word-reveal:nth-child(5) { animation-delay: 0.78s; }
 .hero-title .word-reveal:nth-child(6) { animation-delay: 0.9s; }
 .hero-title .word-reveal:nth-child(7) { animation-delay: 1.02s; }
+
+.text-gradient {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
 
 .hero-subtitle {
     font-family: var(--font-body);
@@ -485,12 +529,14 @@ ul {
 .hero-icon-img {
     width: 100%;
     height: auto;
-    filter: drop-shadow(0 0 60px rgba(255,255,255,0.04));
+    filter: drop-shadow(0 0 50px rgba(139, 92, 246, 0.45))
+            drop-shadow(0 0 110px rgba(34, 211, 238, 0.25));
     transition: filter 0.5s ease;
 }
 
 .hero-icon-svg:hover .hero-icon-img {
-    filter: drop-shadow(0 0 80px rgba(255,255,255,0.08));
+    filter: drop-shadow(0 0 70px rgba(139, 92, 246, 0.6))
+            drop-shadow(0 0 140px rgba(34, 211, 238, 0.35));
 }
 
 /* ========================================
@@ -500,17 +546,20 @@ ul {
     display: inline-block;
     font-family: var(--font-display);
     font-size: 0.6875rem;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #444444;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
     margin-bottom: 18px;
-    transition: letter-spacing var(--transition-slower), color 0.5s ease;
+    transition: letter-spacing var(--transition-slower);
 }
 
 .section-header:hover .section-label {
-    letter-spacing: 0.28em;
-    color: #777777;
+    letter-spacing: 0.3em;
 }
 
 .section-title {
@@ -604,7 +653,8 @@ ul {
     border-color: var(--color-border-hover);
     transform: translateY(-8px) scale(1.02);
     background: rgba(255, 255, 255, 0.03);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45),
+                0 0 50px rgba(124, 58, 237, 0.1);
 }
 
 .pillar:hover::before {
@@ -640,196 +690,176 @@ ul {
 }
 
 /* ========================================
-   SOFTWARE
+   PRODUCTS — Softwares e Sites | Cursos | E-books
    ======================================== */
-.software {
+.products {
     padding: 140px 0;
     background: transparent;
     position: relative;
     z-index: 1;
 }
 
-/* EM BREVE BANNER — mesma proporção da ebooks-cta */
-.em-breve-banner {
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product-card {
+    position: relative;
     text-align: center;
     padding: 64px 48px;
     border-radius: 28px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    background: rgba(255, 255, 255, 0.005);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
     backdrop-filter: var(--blur-card);
     -webkit-backdrop-filter: var(--blur-card);
-    max-width: 640px;
-    margin: 0 auto;
-    position: relative;
+    height: 100%;
+    min-height: 430px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
-    transition: all var(--transition-slower);
-    transform-style: preserve-3d;
+    transition: border-color var(--transition-slower),
+                box-shadow var(--transition-slower),
+                transform var(--transition-slower);
+    transform: translateY(0) scale(1);
 }
 
-.em-breve-glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(255,255,255,0.04), transparent 70%);
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-}
-
-.em-breve-banner:hover .em-breve-glow {
-    opacity: 1;
-}
-
-.em-breve-banner::before {
+.product-card::before {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.02), transparent);
-    animation: shimmer 4s ease-in-out infinite;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.6), rgba(34, 211, 238, 0.6), transparent);
+    opacity: 0.7;
+    transition: opacity 0.5s ease;
 }
 
-.em-breve-banner:hover {
-    border-color: rgba(255, 255, 255, 0.08);
-    transform: translateY(-6px) scale(1.005);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+.product-card:hover {
+    border-color: rgba(139, 92, 246, 0.35);
+    transform: translateY(-6px);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45),
+                0 0 60px rgba(124, 58, 237, 0.12);
 }
 
-.em-breve-text {
+.product-glow {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.16), transparent 65%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.product-card-live .product-glow {
+    background: radial-gradient(circle, rgba(34, 211, 238, 0.18), transparent 65%);
+}
+
+.product-icon {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 22px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.22), rgba(34, 211, 238, 0.12));
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    color: #C4B5FD;
+    box-shadow: 0 12px 36px rgba(124, 58, 237, 0.25);
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+    transition: transform var(--transition-slower), color 0.4s ease;
+}
+
+.product-card-live .product-icon {
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(139, 92, 246, 0.16));
+    border-color: rgba(34, 211, 238, 0.4);
+    color: #67E8F9;
+    box-shadow: 0 12px 36px rgba(34, 211, 238, 0.2);
+}
+
+.product-card:hover .product-icon {
+    transform: scale(1.1) rotate(-4deg);
+}
+
+.product-status {
     display: inline-block;
     font-family: var(--font-display);
     font-size: 0.6875rem;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--color-text-primary);
-    padding: 10px 24px;
+    padding: 9px 22px;
     border-radius: 100px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     position: relative;
     z-index: 1;
 }
 
-.em-breve-desc {
+.status-live {
+    color: #6EE7B7;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    box-shadow: 0 0 28px rgba(16, 185, 129, 0.2);
+}
+
+.status-soon {
+    color: #FCD34D;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    box-shadow: 0 0 28px rgba(245, 158, 11, 0.18);
+}
+
+.product-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.product-desc {
     font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 300;
     color: var(--color-text-muted);
     line-height: 1.7;
-    max-width: 440px;
-    margin: 0 auto;
+    max-width: 460px;
+    margin: 0 auto 36px;
     position: relative;
     z-index: 1;
 }
 
-/* ========================================
-   COURSES
-   ======================================== */
-.courses {
-    padding: 140px 0;
-    background: transparent;
+.product-card .btn {
     position: relative;
     z-index: 1;
 }
 
-.courses .em-breve-banner {
-    background: rgba(255, 255, 255, 0.005);
-    backdrop-filter: var(--blur-card);
-    -webkit-backdrop-filter: var(--blur-card);
+/* Os cards ficam lado a lado, todos visíveis — sem carrossel. */
+
+/* Em telas menores os cards empilham em uma coluna */
+@media (max-width: 1100px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        max-width: 560px;
+        gap: 20px;
+    }
 }
 
-/* ========================================
-   E-BOOKS
-   ======================================== */
-.ebooks {
-    padding: 140px 0;
-    background: transparent;
-    position: relative;
-    z-index: 1;
-}
-
-.ebooks .em-breve-banner {
-    background: rgba(255, 255, 255, 0.005);
-    backdrop-filter: var(--blur-card);
-    -webkit-backdrop-filter: var(--blur-card);
-}
-
-.ebooks-cta {
-    text-align: center;
-    padding: 64px 48px;
-    border-radius: 28px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    background: rgba(255, 255, 255, 0.005);
-    backdrop-filter: var(--blur-card);
-    -webkit-backdrop-filter: var(--blur-card);
-    max-width: 640px;
-    margin: 0 auto;
-    transition: all var(--transition-slower);
-    position: relative;
-    overflow: hidden;
-    transform-style: preserve-3d;
-}
-
-.ebooks-cta-glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(255,255,255,0.03), transparent 70%);
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-}
-
-.ebooks-cta:hover .ebooks-cta-glow {
-    opacity: 1;
-}
-
-.ebooks-cta:hover {
-    transform: translateY(-8px);
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.5);
-}
-
-.ebooks-cta-desc {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 300;
-    color: var(--color-text-muted);
-    line-height: 1.7;
-    margin-bottom: 36px;
-    max-width: 440px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    z-index: 1;
-}
-
-.ebooks-cta .btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 18px 40px;
-    font-size: 0.9375rem;
-    position: relative;
-    z-index: 1;
-}
-
-.ebooks-cta .btn svg {
-    transition: transform var(--transition-slower);
-}
-
-.ebooks-cta .btn:hover svg {
-    transform: translate(4px, -3px);
-}
 
 /* ========================================
    WHY CHOOSE US
@@ -877,7 +907,8 @@ ul {
     border-color: var(--color-border-hover);
     transform: translateY(-8px) scale(1.02);
     background: rgba(255, 255, 255, 0.015);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45),
+                0 0 50px rgba(124, 58, 237, 0.1);
 }
 
 .why-card:hover::before {
@@ -967,7 +998,8 @@ ul {
     border-color: var(--color-border-hover);
     transform: translateY(-8px) scale(1.01);
     background: rgba(255, 255, 255, 0.015);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45),
+                0 0 50px rgba(124, 58, 237, 0.1);
 }
 
 .testimonial-card:hover::before {
@@ -1067,7 +1099,8 @@ ul {
     transform: translateY(-10px) scale(1.02);
     background: rgba(255, 255, 255, 0.015);
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.05);
+                0 0 0 1px rgba(139, 92, 246, 0.3),
+                0 0 60px rgba(124, 58, 237, 0.12);
     opacity: 1;
 }
 
@@ -1191,7 +1224,7 @@ ul {
 }
 
 .footer-col a:hover {
-    color: var(--color-text-primary);
+    color: #A78BFA;
     opacity: 1;
     transform: translateX(4px);
 }
@@ -1220,7 +1253,7 @@ ul {
     font-family: var(--font-body);
     font-size: 0.8125rem;
     font-weight: 300;
-    color: #2A2A2A;
+    color: #4A4A66;
 }
 
 /* ========================================
@@ -1396,6 +1429,11 @@ ul {
     transform: translateY(0);
 }
 
+/* Garante o efeito de elevação no hover do card de produto (vence o reveal) */
+.product-card.reveal.active:hover {
+    transform: translateY(-6px);
+}
+
 /* Smooth text selection */
 ::selection {
     background: rgba(255, 255, 255, 0.12);
@@ -1412,12 +1450,12 @@ ul {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #1A1A1A;
+    background: linear-gradient(180deg, #4C1D95, #1E3A8A);
     border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #2A2A2A;
+    background: linear-gradient(180deg, #6D28D9, #1D4ED8);
 }
 
 /* ========================================
@@ -1570,11 +1608,11 @@ ul {
         top: 100%;
         left: 0;
         right: 0;
-        background: rgba(5, 5, 5, 0.97);
+        background: rgba(6, 6, 16, 0.97);
         backdrop-filter: blur(24px);
         padding: 32px;
         gap: 24px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        border-bottom: 1px solid rgba(139, 92, 246, 0.2);
     }
 
     .about-pillars {
@@ -1598,8 +1636,7 @@ ul {
     }
 
     .about,
-    .software,
-    .courses,
+    .products,
     .why-us,
     .testimonials,
     .contact {
@@ -1610,12 +1647,9 @@ ul {
         margin-bottom: 48px;
     }
 
-    .em-breve-banner {
-        padding: 44px 28px;
-    }
-
-    .ebooks-cta {
-        padding: 44px 28px;
+    .product-card {
+        padding: 48px 28px;
+        min-height: 0;
     }
 }
 

@@ -10,37 +10,179 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ========================================
-    // MÓDULO: WAVES CANVAS — VERSÃO FINAL
+    // MÓDULO: GALÁXIA — FUNDO ANIMADO
+    // Estrelas com brilho pulsante, nebulosas coloridas,
+    // espiral galáctica girando lentamente e estrelas cadentes.
     // ========================================
-    (function initWaves() {
+    (function initGalaxy() {
         const canvas = document.getElementById('particle-canvas');
         if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
         let dpr = window.devicePixelRatio || 1;
-        let width, height;
-        let lines = [];
+        let width = 0;
+        let height = 0;
+        let stars = [];
+        let nebulas = [];
+        let shootingStars = [];
         let time = 0;
+        let nextShootingStar = 400;
         let animId = null;
-        let scrollY = 0;
-        let smoothScrollY = 0;
 
-        const mouse = { x: -9999, y: -9999, set: false };
+        const galaxyCenter = { x: 0.72, y: 0.30 };
+        const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+        const palette = ['#ffffff', '#c7d2fe', '#a5b4fc', '#bfdbfe', '#f0abfc', '#fde68a'];
 
-        const config = {
-            lineColor: 'rgba(255, 255, 255, 0.10)',
-            waveSpeedX: 0.012,
-            waveSpeedY: 0.008,
-            waveAmpX: 65,
-            waveAmpY: 35,
-            friction: 0.92,
-            tension: 0.008,
-            maxCursorMove: 120,
-            xGap: 14,
-            yGap: 32,
-            extraMargin: 200,      // pixels extras fora da tela em cada direção
-            scrollSmooth: 0.06     // fator de suavização do scroll
-        };
+        function rand(min, max) {
+            return min + Math.random() * (max - min);
+        }
+
+        function createStars() {
+            stars = [];
+            const cx = width * galaxyCenter.x;
+            const cy = height * galaxyCenter.y;
+
+            // Estrelas de fundo espalhadas por toda a tela
+            const bgCount = Math.round((width * height) / 8500);
+            for (let i = 0; i < bgCount; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: rand(0.3, 1.4),
+                    twinkle: rand(0.4, 2.0),
+                    phase: rand(0, Math.PI * 2),
+                    color: palette[(Math.random() * palette.length) | 0],
+                    galaxy: false
+                });
+            }
+
+            // Estrelas concentradas na espiral da galáxia
+            const spiralCount = Math.round((width * height) / 15000);
+            const arms = 2;
+            const maxR = Math.min(width, height) * 0.42;
+            for (let i = 0; i < spiralCount; i++) {
+                const arm = i % arms;
+                const angle = arm * Math.PI + i * 0.22;
+                const radius = Math.pow(Math.random(), 0.6) * maxR;
+                const a = angle + radius * 0.006;
+                const spread = rand(0.4, 1.6) * maxR * 0.06;
+                const r = radius + (Math.random() - 0.5) * spread;
+                stars.push({
+                    x: cx + Math.cos(a) * r,
+                    y: cy + Math.sin(a) * r * 0.62,
+                    size: rand(0.5, 2.1),
+                    twinkle: rand(0.3, 1.6),
+                    phase: rand(0, Math.PI * 2),
+                    color: palette[(Math.random() * palette.length) | 0],
+                    galaxy: true,
+                    arm
+                });
+            }
+        }
+
+        function createNebulas() {
+            nebulas = [];
+            const defs = [
+                { color: '124, 58, 237', alpha: 0.15 },
+                { color: '34, 211, 238', alpha: 0.10 },
+                { color: '236, 72, 153', alpha: 0.10 },
+                { color: '99, 102, 241', alpha: 0.11 }
+            ];
+            const count = 6;
+            for (let i = 0; i < count; i++) {
+                const def = defs[i % defs.length];
+                nebulas.push({
+                    x: rand(0, width),
+                    y: rand(0, height),
+                    radius: rand(Math.min(width, height) * 0.28, Math.min(width, height) * 0.55),
+                    color: def.color,
+                    alpha: def.alpha,
+                    pulse: rand(0.10, 0.30),
+                    phase: rand(0, Math.PI * 2)
+                });
+            }
+        }
+
+        function drawNebulas() {
+            ctx.globalCompositeOperation = 'lighter';
+            for (let i = 0; i < nebulas.length; i++) {
+                const n = nebulas[i];
+                const pulse = 0.72 + 0.28 * Math.sin(time * n.pulse * 0.02 + n.phase);
+                const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.radius);
+                grad.addColorStop(0, `rgba(${n.color}, ${(n.alpha * pulse).toFixed(3)})`);
+                grad.addColorStop(1, `rgba(${n.color}, 0)`);
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.globalCompositeOperation = 'source-over';
+        }
+
+        function drawStars() {
+            const cx = width * galaxyCenter.x;
+            const cy = height * galaxyCenter.y;
+            const offX = mouse.x * 0.35;
+            const offY = mouse.y * 0.35;
+            const rotation = time * 0.00011;
+            const cos = Math.cos(rotation);
+            const sin = Math.sin(rotation);
+
+            for (let i = 0; i < stars.length; i++) {
+                const s = stars[i];
+                const twinkle = 0.55 + 0.45 * Math.sin(time * 0.03 * s.twinkle + s.phase);
+
+                let x = s.x;
+                let y = s.y;
+                if (s.galaxy) {
+                    const dx = s.x - cx;
+                    const dy = s.y - cy;
+                    x = cx + dx * cos - dy * sin;
+                    y = cy + dx * sin + dy * cos;
+                }
+
+                ctx.globalAlpha = Math.min(1, twinkle * 0.85 + 0.15);
+                ctx.fillStyle = s.color;
+                ctx.beginPath();
+                ctx.arc(x + offX, y + offY, s.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+        }
+
+        function spawnShootingStar() {
+            shootingStars.push({
+                x: rand(width * 0.1, width * 0.9),
+                y: rand(0, height * 0.35),
+                vx: rand(3.5, 6.5),
+                vy: rand(2.4, 4.2),
+                life: 1,
+                decay: rand(0.008, 0.016),
+                length: rand(60, 130)
+            });
+        }
+
+        function drawShootingStars() {
+            for (let i = shootingStars.length - 1; i >= 0; i--) {
+                const s = shootingStars[i];
+                s.x += s.vx;
+                s.y += s.vy;
+                s.life -= s.decay;
+                if (s.life <= 0) {
+                    shootingStars.splice(i, 1);
+                    continue;
+                }
+                const grad = ctx.createLinearGradient(s.x, s.y, s.x - s.vx * 5, s.y - s.vy * 5);
+                grad.addColorStop(0, `rgba(255, 255, 255, ${(s.life * 0.9).toFixed(3)})`);
+                grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = 1.3;
+                ctx.beginPath();
+                ctx.moveTo(s.x, s.y);
+                ctx.lineTo(s.x - s.vx * 5, s.y - s.vy * 5);
+                ctx.stroke();
+            }
+        }
 
         function resize() {
             dpr = window.devicePixelRatio || 1;
@@ -50,151 +192,39 @@ document.addEventListener('DOMContentLoaded', function() {
             canvas.height = height * dpr;
             canvas.style.width = width + 'px';
             canvas.style.height = height + 'px';
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.scale(dpr, dpr);
-            initLines();
-        }
-
-        function initLines() {
-            lines = [];
-            // Calcular quantas linhas são necessárias para cobrir a viewport + margens extras
-            // As margens extras garantem que as bordas nunca apareçam
-            const totalHeight = height + config.extraMargin * 2;
-            const totalWidth = width + config.extraMargin * 2;
-            const numLines = Math.ceil(totalHeight / config.yGap) + 4;
-            const numPoints = Math.ceil(totalWidth / config.xGap) + 4;
-
-            for (let i = 0; i < numLines; i++) {
-                const line = [];
-                // Posicionar linhas começando ANTES da tela (negativo)
-                const baseY = -config.extraMargin + i * config.yGap;
-                for (let j = 0; j < numPoints; j++) {
-                    // Posicionar pontos começando ANTES da tela (negativo)
-                    const baseX = -config.extraMargin + j * config.xGap;
-                    line.push({
-                        x: baseX,
-                        y: baseY,
-                        bx: baseX,
-                        by: baseY,
-                        vx: 0,
-                        vy: 0
-                    });
-                }
-                lines.push(line);
-            }
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            createStars();
+            createNebulas();
         }
 
         function updateMouse(e) {
-            const rect = canvas.getBoundingClientRect();
-            mouse.x = e.clientX - rect.left;
-            mouse.y = e.clientY - rect.top;
-            mouse.set = true;
-        }
-
-        function resetMouse() {
-            mouse.x = -9999;
-            mouse.y = -9999;
-            mouse.set = false;
+            mouse.tx = (e.clientX / window.innerWidth - 0.5) * 60;
+            mouse.ty = (e.clientY / window.innerHeight - 0.5) * 60;
         }
 
         function animate() {
-            if (!isTabActive) {
-                animId = requestAnimationFrame(animate);
-                return;
-            }
+            if (isTabActive) {
+                time += 1;
+                mouse.x += (mouse.tx - mouse.x) * 0.05;
+                mouse.y += (mouse.ty - mouse.y) * 0.05;
 
-            // Suavizar o scroll
-            smoothScrollY += (scrollY - smoothScrollY) * config.scrollSmooth;
-
-            time += 1;
-            ctx.clearRect(0, 0, width, height);
-
-            // Atualizar e desenhar pontos
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
-                if (line.length < 2) continue;
-
-                ctx.beginPath();
-
-                for (let j = 0; j < line.length; j++) {
-                    const p = line[j];
-
-                    // Ondas base
-                    const waveX = Math.sin(p.by * 0.004 + time * config.waveSpeedX) * config.waveAmpX
-                                  + Math.cos(p.by * 0.0025 + time * config.waveSpeedX * 0.6) * (config.waveAmpX * 0.4);
-                    const waveY = Math.cos(p.bx * 0.004 + time * config.waveSpeedY) * config.waveAmpY
-                                  + Math.sin(p.bx * 0.0025 + time * config.waveSpeedY * 0.6) * (config.waveAmpY * 0.4);
-
-                    // Interação com mouse
-                    let mouseForceX = 0;
-                    let mouseForceY = 0;
-                    const dx = mouse.x - p.x;
-                    const dy = mouse.y - (p.y - smoothScrollY);
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < config.maxCursorMove && dist > 0) {
-                        const force = (1 - dist / config.maxCursorMove);
-                        const angle = Math.atan2(dy, dx);
-                        mouseForceX = -Math.cos(angle) * force * config.maxCursorMove * 0.5;
-                        mouseForceY = -Math.sin(angle) * force * config.maxCursorMove * 0.5;
-                    }
-
-                    // Posição alvo com scroll
-                    const targetX = p.bx + waveX + mouseForceX;
-                    const targetY = p.by + waveY + mouseForceY;
-
-                    // Física de mola
-                    const ax = (targetX - p.x) * config.tension;
-                    const ay = (targetY - p.y) * config.tension;
-
-                    p.vx += ax;
-                    p.vy += ay;
-                    p.vx *= config.friction;
-                    p.vy *= config.friction;
-
-                    p.x += p.vx;
-                    p.y += p.vy;
-
-                    // Desenhar ponto (aplicando o offset de scroll aqui)
-                    const drawX = p.x;
-                    const drawY = p.y - smoothScrollY;
-
-                    if (j === 0) {
-                        ctx.moveTo(drawX, drawY);
-                    } else {
-                        const prev = line[j - 1];
-                        const prevX = prev.x;
-                        const prevY = prev.y - smoothScrollY;
-                        const cx = (prevX + drawX) / 2;
-                        const cy = (prevY + drawY) / 2;
-                        ctx.quadraticCurveTo(prevX, prevY, cx, cy);
-                    }
+                if (time > nextShootingStar) {
+                    spawnShootingStar();
+                    nextShootingStar = time + rand(260, 640);
                 }
 
-                // Fechar a linha até o último ponto
-                const last = line[line.length - 1];
-                ctx.lineTo(last.x, last.y - smoothScrollY);
-
-                ctx.strokeStyle = config.lineColor;
-                ctx.lineWidth = 1;
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-                ctx.stroke();
+                ctx.clearRect(0, 0, width, height);
+                drawNebulas();
+                drawShootingStars();
+                drawStars();
             }
-
             animId = requestAnimationFrame(animate);
         }
-
-        // Scroll handler — atualiza o target do scroll
-        window.addEventListener('scroll', () => {
-            scrollY = window.pageYOffset;
-        }, { passive: true });
 
         window.addEventListener('resize', resize);
 
         if (!isTouch) {
             document.addEventListener('mousemove', updateMouse);
-            document.addEventListener('mouseleave', resetMouse);
         }
 
         resize();
@@ -302,9 +332,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // MÓDULO: SCROLL REVEAL
     // ========================================
     (function initScrollReveal() {
+        // Os cards do carrossel de produtos ficam fora da tela (translateX)
+        // e nunca intersectariam — por isso ficam de fora do reveal.
         const revealElements = document.querySelectorAll(
             '.section-header, .pillar, .why-card, ' +
-            '.testimonial-card, .contact-channel, .em-breve-banner, .ebooks-cta, .legal-section'
+            '.testimonial-card, .contact-channel, .legal-section'
         );
 
         const revealObserver = new IntersectionObserver((entries) => {
@@ -317,9 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                      child.classList.contains('why-card') ||
                                      child.classList.contains('testimonial-card') ||
                                      child.classList.contains('contact-channel') ||
-                                     child.classList.contains('legal-section') ||
-                                     child.classList.contains('em-breve-banner') ||
-                                     child.classList.contains('ebooks-cta')
+                                     child.classList.contains('legal-section')
                         );
                         const index = siblings.indexOf(entry.target);
                         entry.target.style.transitionDelay = `${index * 0.08}s`;
@@ -500,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
             width: 300px;
             height: 300px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,255,255,0.015), transparent 70%);
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.07), transparent 70%);
             pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
