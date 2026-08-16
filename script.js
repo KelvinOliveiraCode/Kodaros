@@ -336,7 +336,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // e nunca intersectariam — por isso ficam de fora do reveal.
         const revealElements = document.querySelectorAll(
             '.section-header, .pillar, .why-card, ' +
-            '.testimonial-card, .contact-channel, .legal-section'
+            '.testimonial-card, .contact-channel, .legal-section, ' +
+            '.quiz-benefit, .quiz-promo-visual'
         );
 
         const revealObserver = new IntersectionObserver((entries) => {
@@ -349,7 +350,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                      child.classList.contains('why-card') ||
                                      child.classList.contains('testimonial-card') ||
                                      child.classList.contains('contact-channel') ||
-                                     child.classList.contains('legal-section')
+                                     child.classList.contains('legal-section') ||
+                                     child.classList.contains('quiz-benefit')
                         );
                         const index = siblings.indexOf(entry.target);
                         entry.target.style.transitionDelay = `${index * 0.08}s`;
