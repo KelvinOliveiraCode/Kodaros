@@ -1838,13 +1838,47 @@ ul {
 /* ========================================
    SEÇÃO E-BOOKS (catálogo integrado ao site principal)
    ======================================== */
-.ebooks {
-    position: relative;
-    z-index: 1;
-    padding: 100px 0 90px;
+/* Modal catálogo de e-books (abre ao clicar, nao ocupa a pagina) */
+.ebooks-modal {
+    position: fixed; inset: 0; z-index: 2000;
+    display: none; align-items: flex-start; justify-content: center;
+    padding: 48px 16px;
 }
-.ebooks .section-header { text-align: center; }
-.ebooks .section-desc { max-width: 660px; margin: 0 auto; }
+.ebooks-modal.open { display: flex; }
+.ebooks-modal-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(3, 3, 10, 0.80);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+.ebooks-modal-panel {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 1180px; max-height: 90vh;
+    overflow-y: auto;
+    background: rgba(10, 10, 22, 0.97);
+    border: 1px solid var(--color-border);
+    border-radius: 22px;
+    padding: 30px 28px 44px;
+    box-shadow: var(--glow-primary);
+    animation: ebookModalIn 0.35s var(--ease-out-expo);
+}
+@keyframes ebookModalIn {
+    from { opacity: 0; transform: translateY(18px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+}
+.ebooks-modal-close {
+    position: absolute; top: 14px; right: 16px; z-index: 2;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-border);
+    color: #fff; font-size: 1.6rem; line-height: 1; cursor: pointer;
+    transition: all var(--transition-normal);
+}
+.ebooks-modal-close:hover {
+    background: var(--color-accent); border-color: transparent; transform: rotate(90deg);
+}
+.ebooks-modal .section-header { text-align: center; }
+.ebooks-modal .section-desc { max-width: 660px; margin: 0 auto; }
 
 .ebook-filter {
     display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center;
@@ -1911,6 +1945,7 @@ ul {
 .ebook-card.hide { display: none; }
 
 @media (max-width: 768px) {
-    .ebooks { padding: 80px 0 64px; }
+    .ebooks-modal { padding: 12px 6px; }
+    .ebooks-modal-panel { padding: 24px 14px 32px; border-radius: 18px; }
     .ebooks-grid { grid-template-columns: 1fr; }
 }

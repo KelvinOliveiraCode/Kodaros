@@ -576,17 +576,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /* ===== FILTRO DE CLASSES — CATÁLOGO DE E-BOOKS ===== */
 const ebookFilter = document.getElementById('ebook-filter');
+const ebookCards = document.querySelectorAll('#ebooks-modal .ebook-card');
+
+function aplicarFiltroEbooks(f) {
+    ebookCards.forEach(card => {
+        const match = (f === 'all') || (card.dataset.class === f);
+        card.classList.toggle('hide', !match);
+    });
+}
+
 if (ebookFilter) {
-    const ebookCards = document.querySelectorAll('#ebooks .ebook-card');
     ebookFilter.querySelectorAll('.ebook-filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             ebookFilter.querySelectorAll('.ebook-filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            const f = btn.dataset.filter;
-            ebookCards.forEach(card => {
-                const match = (f === 'all') || (card.dataset.class === f);
-                card.classList.toggle('hide', !match);
-            });
+            aplicarFiltroEbooks(btn.dataset.filter);
         });
     });
+}
+
+/* ===== MODAL CATÁLOGO DE E-BOOKS (abre so ao clicar) ===== */
+const ebooksModal = document.getElementById('ebooks-modal');
+function openEbooks() {
+    if (!ebooksModal) return;
+    ebooksModal.classList.add('open');
+    ebooksModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    const allBtn = ebooksModal.querySelector('.ebook-filter-btn[data-filter="all"]');
+    if (allBtn) { allBtn.classList.add('active'); aplicarFiltroEbooks('all'); }
+    const panel = ebooksModal.querySelector('.ebooks-modal-panel');
+    if (panel) panel.scrollTop = 0;
+}
+function closeEbooks() {
+    if (!ebooksModal) return;
+    ebooksModal.classList.remove('open');
+    ebooksModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+}
+document.querySelectorAll('[data-ebooks-open]').forEach(el => {
+    el.addEventListener('click', (e) => { e.preventDefault(); openEbooks(); });
+});
+if (ebooksModal) {
+    ebooksModal.querySelectorAll('[data-ebooks-close]').forEach(el => {
+        el.addEventListener('click', closeEbooks);
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeEbooks(); });
 }

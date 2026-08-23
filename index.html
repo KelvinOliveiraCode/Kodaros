@@ -34,7 +34,7 @@
                 <li><a href="#sobre" class="nav-link">Sobre</a></li>
                 <li><a href="#depoimentos" class="nav-link">Depoimentos</a></li>
                 <li><a href="#contato" class="nav-link">Contato</a></li>
-                <li><a href="#ebooks" class="nav-link">E-books</a></li>
+                <li><a class="nav-link" data-ebooks-open>E-books</a></li>
             </ul>
             <a href="#produtos" class="nav-cta">Conheça a KODAROS</a>
             <button class="nav-toggle" aria-label="Menu">
@@ -65,7 +65,7 @@
                         <span>Faça Nosso Quiz</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
-                    <a href="#ebooks" class="btn btn-secondary">
+                    <a class="btn btn-secondary" data-ebooks-open>
                         <span>Explorar E-books</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
                     </a>
@@ -176,7 +176,7 @@
                     <span class="product-status status-live">Disponível</span>
                     <h3 class="product-title">E-books</h3>
                     <p class="product-desc">Acesse nossa loja completa de e-books com conteúdos exclusivos em tecnologia, marketing digital e desenvolvimento pessoal.</p>
-                    <a href="#ebooks" class="btn btn-primary">
+                    <a class="btn btn-primary" data-ebooks-open>
                         <span>Ver catálogo de E-books</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
                     </a>
@@ -355,9 +355,12 @@
         </div>
     </section>
 
-    <!-- E-BOOKS CATÁLOGO (integrado ao site principal) -->
-    <section class="ebooks" id="ebooks">
-        <div class="container">
+    <!-- E-BOOKS CATÁLOGO (modal que abre ao clicar em "E-books") -->
+    <div class="ebooks-modal" id="ebooks-modal" aria-hidden="true">
+        <div class="ebooks-modal-backdrop" data-ebooks-close></div>
+        <div class="ebooks-modal-panel" role="dialog" aria-modal="true" aria-label="Catálogo de E-books">
+            <button class="ebooks-modal-close" data-ebooks-close aria-label="Fechar catálogo">×</button>
+            <div class="container">
             <div class="section-header">
                 <span class="section-label">Loja de E-books</span>
                 <h2 class="section-title">Catálogo de E-books</h2>
@@ -490,7 +493,8 @@
                 </article>
             </div>
         </div>
-    </section>
+    </div>
+</div>
 
     <!-- FOOTER -->
     <footer class="footer">
