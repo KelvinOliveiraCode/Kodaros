@@ -573,3 +573,20 @@ document.addEventListener('DOMContentLoaded', function() {
         animateGlow();
     })();
 });
+
+/* ===== FILTRO DE CLASSES — CATÁLOGO DE E-BOOKS ===== */
+const ebookFilter = document.getElementById('ebook-filter');
+if (ebookFilter) {
+    const ebookCards = document.querySelectorAll('#ebooks .ebook-card');
+    ebookFilter.querySelectorAll('.ebook-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            ebookFilter.querySelectorAll('.ebook-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const f = btn.dataset.filter;
+            ebookCards.forEach(card => {
+                const match = (f === 'all') || (card.dataset.class === f);
+                card.classList.toggle('hide', !match);
+            });
+        });
+    });
+}
