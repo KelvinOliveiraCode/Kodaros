@@ -25,12 +25,13 @@ document.addEventListener('DOMContentLoaded', function() {
         let stars = [];
         let nebulas = [];
         let shootingStars = [];
+        let planets = [];
         let time = 0;
         let nextShootingStar = 400;
         let animId = null;
 
         const galaxyCenter = { x: 0.72, y: 0.30 };
-        const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+        const mouse = { x: 0, y: 0, tx: 0, ty: 0, cx: 0, cy: 0 };
         const palette = ['#ffffff', '#c7d2fe', '#a5b4fc', '#bfdbfe', '#f0abfc', '#fde68a'];
 
         function rand(min, max) {
@@ -184,6 +185,48 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        function createPlanets() {
+            planets = [];
+            const defs = [
+                { color: '#8B5CF6', light: '#C4B5FD', ring: 'rgba(139,92,246,0.55)', dist: 220, size: 24, speed: 0.0007 },
+                { color: '#22D3EE', light: '#A5F3FC', ring: 'rgba(34,211,238,0.55)', dist: 330, size: 16, speed: -0.0005 },
+                { color: '#F472B6', light: '#FBCFE8', ring: 'rgba(236,72,153,0.55)', dist: 150, size: 30, speed: 0.0010 },
+                { color: '#FFFFFF', light: '#FFFFFF', ring: 'rgba(255,255,255,0.40)', dist: 450, size: 12, speed: 0.00035 }
+            ];
+            for (const d of defs) {
+                planets.push({ angle: Math.random() * Math.PI * 2, dist: d.dist, size: d.size, speed: d.speed, color: d.color, light: d.light, ring: d.ring, near: 0 });
+            }
+        }
+
+        function drawPlanets() {
+            const cx = width * galaxyCenter.x;
+            const cy = height * galaxyCenter.y;
+            for (const p of planets) {
+                p.angle += p.speed;
+                const ox = cx + Math.cos(p.angle) * p.dist;
+                const oy = cy + Math.sin(p.angle) * p.dist * 0.62;
+                let ix = ox, iy = oy, near = 0;
+                if (mouse.cx) {
+                    const dx = mouse.cx - ox, dy = mouse.cy - oy;
+                    const d = Math.hypot(dx, dy);
+                    const inf = Math.max(0, 1 - d / 340);
+                    ix = ox + dx * inf * 0.4; iy = oy + dy * inf * 0.4; near = inf;
+                }
+                if (near > 0.03) {
+                    ctx.strokeStyle = `rgba(255,255,255,${(near * 0.35).toFixed(3)})`;
+                    ctx.lineWidth = 1; ctx.beginPath();
+                    ctx.moveTo(ix, iy); ctx.lineTo(mouse.cx, mouse.cy); ctx.stroke();
+                }
+                const g = ctx.createRadialGradient(ix - p.size * 0.3, iy - p.size * 0.3, p.size * 0.1, ix, iy, p.size);
+                g.addColorStop(0, p.light); g.addColorStop(1, p.color);
+                ctx.globalAlpha = 0.95; ctx.fillStyle = g;
+                ctx.beginPath(); ctx.arc(ix, iy, p.size, 0, Math.PI * 2); ctx.fill();
+                ctx.globalAlpha = 0.5; ctx.strokeStyle = p.ring; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.ellipse(ix, iy, p.size * 1.5, p.size * 0.5, p.angle, 0, Math.PI * 2); ctx.stroke();
+                ctx.globalAlpha = 1;
+            }
+        }
+
         function resize() {
             dpr = window.devicePixelRatio || 1;
             width = window.innerWidth;
@@ -195,11 +238,14 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             createStars();
             createNebulas();
+            createPlanets();
         }
 
         function updateMouse(e) {
             mouse.tx = (e.clientX / window.innerWidth - 0.5) * 60;
             mouse.ty = (e.clientY / window.innerHeight - 0.5) * 60;
+            mouse.cx = e.clientX;
+            mouse.cy = e.clientY;
         }
 
         function animate() {
@@ -210,13 +256,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (time > nextShootingStar) {
                     spawnShootingStar();
-                    nextShootingStar = time + rand(260, 640);
+                    if (Math.random() < 0.4) spawnShootingStar();
+                    nextShootingStar = time + rand(120, 340);
                 }
 
                 ctx.clearRect(0, 0, width, height);
                 drawNebulas();
                 drawShootingStars();
                 drawStars();
+                drawPlanets();
             }
             animId = requestAnimationFrame(animate);
         }
