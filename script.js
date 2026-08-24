@@ -15,8 +15,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // espiral galáctica girando lentamente e estrelas cadentes.
     // ========================================
     (function initGalaxy() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        // desabilita em páginas legais para LCP
+        if (document.body.dataset.noGalaxy === '1') return;
         const canvas = document.getElementById('particle-canvas');
         if (!canvas) return;
+        // reduz custo em mobile com DPR alto
+        const isHighDprMobile = window.matchMedia('(pointer: coarse)').matches && (window.devicePixelRatio || 1) > 1.5;
+        if (isHighDprMobile && window.innerWidth < 768) {
+            canvas.style.opacity = '0.7';
+        }
 
         const ctx = canvas.getContext('2d');
         let dpr = window.devicePixelRatio || 1;
@@ -290,10 +298,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const navToggle = document.querySelector('.nav-toggle');
         const navMenu = document.querySelector('.nav-menu');
         if (navToggle && navMenu) {
-            navToggle.addEventListener('click', function() {
-                navMenu.classList.toggle('active');
+            function syncToggle(expanded){
+                navToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+                navToggle.setAttribute('aria-label', expanded ? 'Fechar menu' : 'Abrir menu');
                 const spans = navToggle.querySelectorAll('span');
-                if (navMenu.classList.contains('active')) {
+                if (expanded) {
                     spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
                     spans[1].style.opacity = '0';
                     spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
@@ -302,14 +311,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     spans[1].style.opacity = '1';
                     spans[2].style.transform = 'none';
                 }
+            }
+            navToggle.addEventListener('click', function() {
+                const willOpen = !navMenu.classList.contains('active');
+                navMenu.classList.toggle('active');
+                syncToggle(willOpen);
             });
-            navMenu.querySelectorAll('.nav-link').forEach(link => {
+            navMenu.querySelectorAll('.nav-link, .nav-link-btn').forEach(link => {
                 link.addEventListener('click', () => {
                     navMenu.classList.remove('active');
-                    const spans = navToggle.querySelectorAll('span');
-                    spans[0].style.transform = 'none';
-                    spans[1].style.opacity = '1';
-                    spans[2].style.transform = 'none';
+                    syncToggle(false);
                 });
             });
         }
@@ -589,36 +600,78 @@ function aplicarFiltroEbooks(f) {
     ebookCards.forEach(card => {
         const match = (f === 'all') || (card.dataset.class === f);
         card.classList.toggle('hide', !match);
+        card.setAttribute('aria-hidden', match ? 'false' : 'true');
     });
 }
 
 if (ebookFilter) {
+    ebookFilter.setAttribute('role','group');
+    ebookFilter.setAttribute('aria-label','Filtrar e-books por nível');
     ebookFilter.querySelectorAll('.ebook-filter-btn').forEach(btn => {
+        btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
         btn.addEventListener('click', () => {
-            ebookFilter.querySelectorAll('.ebook-filter-btn').forEach(b => b.classList.remove('active'));
+            ebookFilter.querySelectorAll('.ebook-filter-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
             btn.classList.add('active');
+            btn.setAttribute('aria-pressed','true');
             aplicarFiltroEbooks(btn.dataset.filter);
+            try{ localStorage.setItem('kodaros_ebook_filter', btn.dataset.filter); } catch(e){}
         });
     });
+    try{
+        const saved = localStorage.getItem('kodaros_ebook_filter');
+        if(saved && ebookFilter.querySelector('[data-filter="'+saved+'"]')){
+            ebookFilter.querySelectorAll('.ebook-filter-btn').forEach(b=>b.classList.remove('active'));
+            const t=ebookFilter.querySelector('[data-filter="'+saved+'"]');
+            t.classList.add('active'); t.setAttribute('aria-pressed','true');
+            aplicarFiltroEbooks(saved);
+        }
+    } catch(e){}
 }
 
 /* ===== MODAL CATÁLOGO DE E-BOOKS (abre so ao clicar) ===== */
 const ebooksModal = document.getElementById('ebooks-modal');
+let lastEbooksTrigger = null;
+let savedScrollY = 0;
 function openEbooks() {
     if (!ebooksModal) return;
+    lastEbooksTrigger = document.activeElement;
+    savedScrollY = window.pageYOffset;
     ebooksModal.classList.add('open');
     ebooksModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${savedScrollY}px`;
+    document.body.style.width = '100%';
     const allBtn = ebooksModal.querySelector('.ebook-filter-btn[data-filter="all"]');
-    if (allBtn) { allBtn.classList.add('active'); aplicarFiltroEbooks('all'); }
+    // keep saved filter if exists, else all
     const panel = ebooksModal.querySelector('.ebooks-modal-panel');
     if (panel) panel.scrollTop = 0;
+    const closeBtn = ebooksModal.querySelector('.ebooks-modal-close');
+    if(closeBtn) closeBtn.focus();
+    document.addEventListener('keydown', trapEbooksFocus);
+    if(location.hash !== '#ebooks') history.pushState({ebooks:true}, '', '#ebooks');
 }
 function closeEbooks() {
     if (!ebooksModal) return;
     ebooksModal.classList.remove('open');
     ebooksModal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, savedScrollY);
+    document.removeEventListener('keydown', trapEbooksFocus);
+    if(location.hash === '#ebooks') history.pushState(null,'', location.pathname + location.search);
+    if(lastEbooksTrigger && lastEbooksTrigger.focus) lastEbooksTrigger.focus();
+}
+function trapEbooksFocus(e){
+    if(e.key === 'Escape'){ closeEbooks(); return; }
+    if(e.key !== 'Tab' || !ebooksModal.classList.contains('open')) return;
+    const focusable = ebooksModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if(!focusable.length) return;
+    const first = focusable[0], last = focusable[focusable.length-1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
 }
 document.querySelectorAll('[data-ebooks-open]').forEach(el => {
     el.addEventListener('click', (e) => { e.preventDefault(); openEbooks(); });
@@ -627,5 +680,58 @@ if (ebooksModal) {
     ebooksModal.querySelectorAll('[data-ebooks-close]').forEach(el => {
         el.addEventListener('click', closeEbooks);
     });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeEbooks(); });
 }
+// deep-link #ebooks
+if(location.hash === '#ebooks'){
+    document.addEventListener('DOMContentLoaded', ()=> setTimeout(openEbooks, 300));
+}
+window.addEventListener('popstate', ()=>{
+    if(location.hash === '#ebooks' && !ebooksModal.classList.contains('open')) openEbooks();
+    else if(location.hash !== '#ebooks' && ebooksModal.classList.contains('open')) closeEbooks();
+});
+
+/* ===== NOTIFY + CONTACT HANDLERS ===== */
+function handleNotify(e){
+    e.preventDefault();
+    const form = e.target;
+    if(form.querySelector('[name="hp"]')?.value) return false;
+    const email = form.querySelector('input[type="email"]')?.value.trim();
+    const topic = form.dataset.notify || 'geral';
+    const msg = form.querySelector('.notify-msg');
+    if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+        if(msg) msg.textContent = 'Informe um e-mail válido.';
+        return false;
+    }
+    try{
+        const key='kodaros_notify_'+topic;
+        const arr=JSON.parse(localStorage.getItem(key)||'[]');
+        if(!arr.includes(email)){ arr.push(email); localStorage.setItem(key, JSON.stringify(arr)); }
+    } catch(_){}
+    if(msg) msg.textContent = 'Obrigado! Avisaremos em '+email+'.';
+    form.reset();
+    // fallback mailto
+    setTimeout(()=>{ window.location.href = 'mailto:kodaros01@gmail.com?subject=Avise-me '+topic+'&body=Quero ser avisado em '+encodeURIComponent(email); }, 800);
+    return false;
+}
+function handleContact(e){
+    e.preventDefault();
+    const form = e.target;
+    if(form.querySelector('[name="hp"]')?.value) return false;
+    const name=document.getElementById('cf-name')?.value.trim();
+    const email=document.getElementById('cf-email')?.value.trim();
+    const m=document.getElementById('cf-msg')?.value.trim();
+    const status=document.getElementById('cf-msg-status');
+    if(!name || !email || !m){ if(status) status.textContent='Preencha todos os campos.'; return false; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ if(status) status.textContent='E-mail inválido.'; return false; }
+    const subject=encodeURIComponent('Contato site — '+name);
+    const body=encodeURIComponent('Nome: '+name+'\nE-mail: '+email+'\n\nMensagem:\n'+m);
+    window.location.href='mailto:kodaros01@gmail.com?subject='+subject+'&body='+body;
+    if(status) status.textContent='Abrindo seu e-mail... Se não abrir, escreva para kodaros01@gmail.com';
+    form.reset();
+    return false;
+}
+// footer year
+document.addEventListener('DOMContentLoaded', ()=>{
+    const y=document.getElementById('footer-year');
+    if(y) y.textContent = new Date().getFullYear();
+});

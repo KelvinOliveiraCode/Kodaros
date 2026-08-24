@@ -37,6 +37,14 @@
     --blur-card: blur(14px);
 }
 
+/* SKIP LINK */
+.skip-link {
+    position: absolute; left: -9999px; top: 10px; z-index: 99999;
+    background: #fff; color: #05050D; padding: 10px 18px; border-radius: 999px;
+    font-weight: 600; font-size: 0.875rem;
+}
+.skip-link:focus { left: 16px; }
+
 /* RESET & BASE */
 *, *::before, *::after {
     margin: 0;
@@ -48,6 +56,8 @@ html {
     scroll-behavior: smooth;
     font-size: 16px;
 }
+
+:focus-visible { outline: 2px solid #C4B5FD; outline-offset: 3px; }
 
 body {
     font-family: var(--font-display), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -183,6 +193,10 @@ ul {
     position: relative;
     padding-bottom: 4px;
     transition: color 0.35s ease;
+}
+.nav-link-btn {
+    background: none; border: none; cursor: pointer; padding-bottom: 4px;
+    font-family: inherit; font-size: inherit; font-weight: inherit; color: inherit; letter-spacing: inherit;
 }
 
 .nav-link::after {
@@ -1042,7 +1056,7 @@ ul {
     font-family: var(--font-body);
     font-size: 0.8125rem;
     font-weight: 300;
-    color: #444444;
+    color: var(--color-text-muted);
 }
 
 /* ========================================
@@ -1140,7 +1154,7 @@ ul {
     font-weight: 500;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #444444;
+    color: var(--color-text-muted);
 }
 
 .channel-value {
@@ -1188,7 +1202,7 @@ ul {
     font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 300;
-    color: #444444;
+    color: var(--color-text-muted);
     line-height: 1.6;
 }
 
@@ -1218,7 +1232,7 @@ ul {
     font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 300;
-    color: #444444;
+    color: var(--color-text-muted);
     transition: color 0.35s ease, transform var(--transition-slower);
     display: inline-block;
 }
@@ -1253,7 +1267,7 @@ ul {
     font-family: var(--font-body);
     font-size: 0.8125rem;
     font-weight: 300;
-    color: #4A4A66;
+    color: #7A7AA0;
 }
 
 /* ========================================
@@ -1286,7 +1300,7 @@ ul {
     font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 300;
-    color: #444444;
+    color: var(--color-text-muted);
 }
 
 .legal-content {
@@ -1538,6 +1552,14 @@ ul {
     #particle-canvas, .cursor-glow, .hero-icon-svg, .scroll-indicator {
         display: none !important;
     }
+    .about-pillars:hover .pillar,
+    .why-grid:hover .why-card,
+    .testimonials-grid:hover .testimonial-card,
+    .contact-channels:hover .contact-channel { opacity: 1 !important; }
+}
+@media (max-width: 768px) {
+    .navbar.scrolled, .navbar-solid { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    .product-card, .why-card, .testimonial-card, .contact-channel, .pillar { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
 }
 
 /* ========================================
@@ -1943,6 +1965,30 @@ ul {
     color: var(--color-accent-2); margin-top: 0.4rem;
 }
 .ebook-card.hide { display: none; }
+
+/* NOTIFY FORM + CONTACT FORM */
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+.notify-form { margin-top: 18px; width: 100%; }
+.notify-form input[type="email"] {
+    width: 100%; padding: 12px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04); color: #fff; font-family: var(--font-body); font-size: 0.9rem;
+}
+.notify-form input[type="email"]:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(139,92,246,0.2); }
+.notify-msg { font-size: 0.78rem; color: #6EE7B7; margin-top: 8px; min-height: 1.2em; }
+.contact-form { max-width: 700px; margin: 48px auto 0; padding: 32px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.015); backdrop-filter: var(--blur-card); }
+.contact-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.contact-form .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.contact-form label { font-size: 0.78rem; font-weight: 600; color: var(--color-text-muted); }
+.contact-form input, .contact-form textarea {
+    padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04); color: #fff; font-family: var(--font-body); font-size: 0.9rem; width: 100%;
+}
+.contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(139,92,246,0.2); }
+.contact-form textarea { resize: vertical; }
+@media (max-width: 768px) {
+    .contact-form-grid { grid-template-columns: 1fr; }
+    .contact-form { padding: 24px 18px; }
+}
 
 @media (max-width: 768px) {
     .ebooks-modal { padding: 12px 6px; }

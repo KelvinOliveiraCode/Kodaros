@@ -14,31 +14,62 @@
     <meta property="og:url" content="https://kelvinoliveiracode.github.io/Kodaros/">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="theme-color" content="#05050D">
+    <link rel="canonical" href="https://kelvinoliveiracode.github.io/Kodaros/">
+    <link rel="icon" type="image/png" href="kodaros_icon.png">
+    <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="style.css?v=3">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "KODAROS",
+      "url": "https://kelvinoliveiracode.github.io/Kodaros/",
+      "logo": "https://kelvinoliveiracode.github.io/Kodaros/kodaros_logo.png",
+      "sameAs": ["https://www.instagram.com/kodaros01"],
+      "contactPoint": {"@type":"ContactPoint","telephone":"+55-91-9209-4504","contactType":"customer service","email":"kodaros01@gmail.com"}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"ItemList",
+      "name":"E-books KODAROS",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"Lançamento Milionário","url":"https://pay.hotmart.com/R106895415M"},
+        {"@type":"ListItem","position":2,"name":"Tráfego Que Vende","url":"https://pay.hotmart.com/D106894870O"},
+        {"@type":"ListItem","position":3,"name":"Venda Mais Hoje","url":"https://pay.hotmart.com/R106895345D"},
+        {"@type":"ListItem","position":4,"name":"Os 10 Pilares da Gestão Empresarial","url":"https://pay.hotmart.com/S107016677T"},
+        {"@type":"ListItem","position":5,"name":"Os 10 Pilares do Controle Financeiro","url":"https://pay.hotmart.com/E107016796K"},
+        {"@type":"ListItem","position":6,"name":"Use Seu Site Para Escalar Sua Empresa","url":"https://pay.hotmart.com/Y107016734X"},
+        {"@type":"ListItem","position":7,"name":"Transforme Reclamações em Vendas","url":"https://pay.hotmart.com/G107016779V"},
+        {"@type":"ListItem","position":8,"name":"Arquitetura de Aquisição","url":"https://kelvinoliveiracode.github.io/site-Arquitetura-de-Aquisicao/"}
+      ]
+    }
+    </script>
 </head>
 <body>
-
+    <a href="#inicio" class="skip-link">Pular para o conteúdo</a>
     <!-- CANVAS BACKGROUND — GLOBAL -->
     <canvas id="particle-canvas" aria-hidden="true" role="presentation"></canvas>
 
     <!-- NAVBAR -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" aria-label="Navegação principal">
         <div class="nav-container">
-            <a href="#" class="nav-logo">
-                <img src="kodaros_logo.png?v=2" alt="KODAROS">
+            <a href="#inicio" class="nav-logo" aria-label="KODAROS — voltar ao início">
+                <img src="kodaros_logo.png?v=2" alt="KODAROS" width="120" height="38">
             </a>
-            <ul class="nav-menu">
+            <ul class="nav-menu" id="nav-menu">
                 <li><a href="#inicio" class="nav-link">Início</a></li>
                 <li><a href="#produtos" class="nav-link">Produtos</a></li>
                 <li><a href="#sobre" class="nav-link">Sobre</a></li>
                 <li><a href="#depoimentos" class="nav-link">Depoimentos</a></li>
                 <li><a href="#contato" class="nav-link">Contato</a></li>
                 <li><a href="https://kelvinoliveiracode.github.io/kodarosferramentas/" target="_blank" rel="noopener" class="nav-link">Ferramentas</a></li>
-                <li><a class="nav-link" data-ebooks-open>E-books</a></li>
+                <li><button type="button" class="nav-link nav-link-btn" data-ebooks-open aria-haspopup="dialog" aria-controls="ebooks-modal">E-books</button></li>
             </ul>
             <a href="#produtos" class="nav-cta">Conheça a KODAROS</a>
-            <button class="nav-toggle" aria-label="Menu">
+            <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-menu">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -66,15 +97,15 @@
                         <span>Faça Nosso Quiz</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
-                    <a class="btn btn-secondary" data-ebooks-open>
+                    <button type="button" class="btn btn-secondary" data-ebooks-open aria-haspopup="dialog" aria-controls="ebooks-modal">
                         <span>Explorar E-books</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="hero-visual">
                 <div class="hero-icon-svg">
-                    <img src="kodaros_icon.png" alt="Ícone KODAROS" class="hero-icon-img">
+                    <img src="kodaros_icon.png" alt="Ícone KODAROS — tecnologia e software premium" class="hero-icon-img" width="420" height="420" loading="eager">
                 </div>
             </div>
         </div>
@@ -83,43 +114,7 @@
         </div>
     </section>
 
-    <!-- QUIZ PROMO SECTION -->
-    <section class="quiz-promo" id="quiz">
-        <div class="container">
-            <div class="quiz-promo-card">
-                <div class="quiz-promo-content">
-                    <span class="section-label">Diagnóstico Gratuito</span>
-                    <h2 class="section-title">Faça nosso quiz e descubra o que está travando o seu crescimento.</h2>
-                    <p class="section-desc">Responda 4 perguntas rápidas, adaptadas ao seu perfil, e receba na hora um diagnóstico personalizado do seu momento — de empresa, iniciante no digital ou em transição.</p>
-                    <ul class="quiz-benefits">
-                        <li class="quiz-benefit">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
-                            <span><strong>Diagnóstico personalizado</strong> em menos de 2 minutos</span>
-                        </li>
-                        <li class="quiz-benefit">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
-                            <span><strong>E-book gratuito:</strong> Do Zero ao Patrimônio — 42 páginas para baixar ao final</span>
-                        </li>
-                        <li class="quiz-benefit">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
-                            <span><strong>100% grátis</strong> — sem cadastro e sem spam</span>
-                        </li>
-                    </ul>
-                    <a href="https://kelvinoliveiracode.github.io/site-kodaros-funil/" target="_blank" rel="noopener" class="btn btn-primary quiz-cta">
-                        <span>Fazer o Quiz Agora</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
-                    <span class="quiz-note">2 minutos &bull; recompensa liberada imediatamente</span>
-                </div>
-                <div class="quiz-promo-visual">
-                    <img src="ebook-cover.png" alt="E-book Do Zero ao Patrimônio" class="quiz-ebook-cover">
-                    <span class="quiz-gift-tag">PRESENTE GARANTIDO</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ABOUT SECTION -->
+<!-- ABOUT SECTION -->
     <section class="about" id="sobre">
         <div class="container">
             <div class="about-grid">
@@ -168,6 +163,21 @@
             </div>
 
             <div class="products-grid">
+                <!-- Ferramentas — destaque -->
+                <article class="product-card product-card-live">
+                    <div class="product-glow"></div>
+                    <div class="product-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 005.4-5.4l-2.7 2.7-2-2 2.7-2.7z"/></svg>
+                    </div>
+                    <span class="product-status status-live">Destaque</span>
+                    <h3 class="product-title">Ferramentas</h3>
+                    <p class="product-desc">Calculadoras e geradores gratuitos para aquisição, lançamento, financeiro, vendas, suporte e gestão. Citáveis nos nossos e-books, 100% no navegador.</p>
+                    <a class="btn btn-primary" href="https://kelvinoliveiracode.github.io/kodarosferramentas/" target="_blank" rel="noopener">
+                        <span>Ir para o site de Ferramentas</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                    </a>
+                </article>
+
                 <!-- E-books — já lançado -->
                 <article class="product-card product-card-live">
                     <div class="product-glow"></div>
@@ -177,25 +187,10 @@
                     <span class="product-status status-live">Disponível</span>
                     <h3 class="product-title">E-books</h3>
                     <p class="product-desc">Acesse nossa loja completa de e-books com conteúdos exclusivos em tecnologia, marketing digital e desenvolvimento pessoal.</p>
-                    <a class="btn btn-primary" data-ebooks-open>
+                    <button type="button" class="btn btn-primary" data-ebooks-open aria-haspopup="dialog" aria-controls="ebooks-modal">
                         <span>Ver catálogo de E-books</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-                    </a>
-                </article>
-
-                <!-- Ferramentas — já lançado -->
-                <article class="product-card product-card-live">
-                    <div class="product-glow"></div>
-                    <div class="product-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 005.4-5.4l-2.7 2.7-2-2 2.7-2.7z"/></svg>
-                    </div>
-                    <span class="product-status status-live">Disponível</span>
-                    <h3 class="product-title">Ferramentas</h3>
-                    <p class="product-desc">Calculadoras e geradores gratuitos para aquisição, lançamento, financeiro, vendas, suporte e gestão. Citáveis nos nossos e-books, 100% no navegador.</p>
-                    <a class="btn btn-primary" href="https://kelvinoliveiracode.github.io/kodarosferramentas/" target="_blank" rel="noopener">
-                        <span>Ir para o site de Ferramentas</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-                    </a>
+                    </button>
                 </article>
 
                 <!-- Softwares e Sites — em breve -->
@@ -206,11 +201,14 @@
                     </div>
                     <span class="product-status status-soon">Em Breve</span>
                     <h3 class="product-title">Softwares e Sites</h3>
-                    <p class="product-desc">Nossos softwares e sites estão em desenvolvimento. Em breve você terá acesso às melhores soluções tecnológicas do mercado.</p>
-                    <button class="btn btn-secondary btn-disabled" disabled aria-disabled="true">
-                        <span>Ir para o site de Softwares e Sites</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    </button>
+                    <p class="product-desc">Nossos softwares e sites estão em desenvolvimento. Avise-me no lançamento.</p>
+                    <form class="notify-form" data-notify="softwares" onsubmit="return handleNotify(event)">
+                        <label class="sr-only" for="notify-softwares">Seu e-mail</label>
+                        <input id="notify-softwares" type="email" placeholder="seu@email.com" required autocomplete="email" aria-label="E-mail para avisar sobre Softwares e Sites">
+                        <input type="text" name="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+                        <button type="submit" class="btn btn-secondary" style="margin-top:10px;width:100%">Avise-me</button>
+                        <p class="notify-msg" aria-live="polite"></p>
+                    </form>
                 </article>
 
                 <!-- Cursos — em breve -->
@@ -221,17 +219,56 @@
                     </div>
                     <span class="product-status status-soon">Em Breve</span>
                     <h3 class="product-title">Cursos</h3>
-                    <p class="product-desc">Nossos cursos estão sendo preparados com conteúdo de alta qualidade. Fique atento para o lançamento.</p>
-                    <button class="btn btn-secondary btn-disabled" disabled aria-disabled="true">
-                        <span>Ir para o site de Cursos</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    </button>
+                    <p class="product-desc">Nossos cursos estão sendo preparados com conteúdo de alta qualidade. Avise-me no lançamento.</p>
+                    <form class="notify-form" data-notify="cursos" onsubmit="return handleNotify(event)">
+                        <label class="sr-only" for="notify-cursos">Seu e-mail</label>
+                        <input id="notify-cursos" type="email" placeholder="seu@email.com" required autocomplete="email" aria-label="E-mail para avisar sobre Cursos">
+                        <input type="text" name="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+                        <button type="submit" class="btn btn-secondary" style="margin-top:10px;width:100%">Avise-me</button>
+                        <p class="notify-msg" aria-live="polite"></p>
+                    </form>
                 </article>
             </div>
         </div>
     </section>
 
-    <!-- WHY CHOOSE US -->
+        <!-- QUIZ PROMO SECTION -->
+    <section class="quiz-promo" id="quiz">
+        <div class="container">
+            <div class="quiz-promo-card">
+                <div class="quiz-promo-content">
+                    <span class="section-label">Diagnóstico Gratuito</span>
+                    <h2 class="section-title">Faça nosso quiz e descubra o que está travando o seu crescimento.</h2>
+                    <p class="section-desc">Responda 4 perguntas rápidas, adaptadas ao seu perfil, e receba na hora um diagnóstico personalizado do seu momento — de empresa, iniciante no digital ou em transição.</p>
+                    <ul class="quiz-benefits">
+                        <li class="quiz-benefit">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
+                            <span><strong>Diagnóstico personalizado</strong> em menos de 2 minutos</span>
+                        </li>
+                        <li class="quiz-benefit">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
+                            <span><strong>E-book gratuito:</strong> Do Zero ao Patrimônio — 42 páginas para baixar ao final</span>
+                        </li>
+                        <li class="quiz-benefit">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>
+                            <span><strong>100% grátis</strong> — sem cadastro e sem spam</span>
+                        </li>
+                    </ul>
+                    <a href="https://kelvinoliveiracode.github.io/site-kodaros-funil/" target="_blank" rel="noopener" class="btn btn-primary quiz-cta">
+                        <span>Fazer o Quiz Agora</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                    <span class="quiz-note">2 minutos &bull; recompensa liberada imediatamente</span>
+                </div>
+                <div class="quiz-promo-visual">
+                    <img src="ebook-cover.png" alt="E-book Do Zero ao Patrimônio — presente do quiz" class="quiz-ebook-cover" width="230" height="340" loading="lazy">
+                    <span class="quiz-gift-tag">PRESENTE GARANTIDO</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- WHY CHOOSE US -->
     <section class="why-us">
         <div class="container">
             <div class="section-header">
@@ -277,10 +314,11 @@
             <div class="section-header">
                 <span class="section-label">Depoimentos</span>
                 <h2 class="section-title">O que dizem sobre nós</h2>
+                <p class="section-desc" style="margin:0 auto; font-size:0.82rem; color:var(--color-text-dim)">* Depoimentos de usuários iniciais e parceiros — resultados variam conforme aplicação.</p>
             </div>
             <div class="testimonials-grid">
                 <div class="testimonial-card" data-tilt>
-                    <div class="stars">★★★★★</div>
+                    <div class="stars" aria-label="5 de 5 estrelas">★★★★★</div>
                     <p class="testimonial-text">"A plataforma trouxe muito mais organização para nossa rotina. A interface é intuitiva e os recursos são exatamente o que precisávamos."</p>
                     <div class="testimonial-author">
                         <strong>Lucas Andrade</strong>
@@ -368,6 +406,16 @@
                     </div>
                 </a>
             </div>
+            <form class="contact-form" id="contactForm" onsubmit="return handleContact(event)" novalidate>
+                <div class="contact-form-grid">
+                    <div class="field"><label for="cf-name">Nome</label><input id="cf-name" type="text" placeholder="Seu nome" required autocomplete="name"></div>
+                    <div class="field"><label for="cf-email">E-mail</label><input id="cf-email" type="email" placeholder="seu@email.com" required autocomplete="email"></div>
+                </div>
+                <div class="field"><label for="cf-msg">Mensagem</label><textarea id="cf-msg" rows="5" placeholder="Como podemos ajudar?" required></textarea></div>
+                <input type="text" name="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+                <button type="submit" class="btn btn-primary">Enviar mensagem</button>
+                <p class="notify-msg" id="cf-msg-status" aria-live="polite"></p>
+            </form>
         </div>
     </section>
 
@@ -394,91 +442,91 @@
             <div class="ebooks-grid">
                 <!-- Clássico 1 -->
                 <article class="ebook-card" data-class="classicos">
-                    <div class="ebook-cover"><img src="livro3.png" alt="Lançamento Milionário"></div>
+                    <div class="ebook-cover"><img src="livro3.png" alt="Lançamento Milionário" width="270" height="360" loading="lazy"></div>
                     <div class="ebook-body">
                         <span class="ebook-badge">Clássico</span>
                         <h3 class="ebook-title">Lançamento Milionário</h3>
                         <p class="ebook-desc">O método para vender cursos e produtos digitais em 2026: do planejamento à execução de lançamentos que convertem.</p>
                         <div class="ebook-price"><span class="old">De R$ 47,00</span><span class="now">R$ 12,99</span></div>
-                        <a href="https://pay.hotmart.com/R106895415M" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
+                        <a href="https://pay.hotmart.com/R106895415M?utm_source=kodaros_site&utm_medium=site&utm_campaign=ebooks_modal" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
                     </div>
                 </article>
 
                 <!-- Clássico 2 -->
                 <article class="ebook-card" data-class="classicos">
-                    <div class="ebook-cover"><img src="livro1.png" alt="Tráfego Que Vende"></div>
+                    <div class="ebook-cover"><img src="livro1.png" alt="Tráfego Que Vende" width="270" height="360" loading="lazy"></div>
                     <div class="ebook-body">
                         <span class="ebook-badge">Clássico</span>
                         <h3 class="ebook-title">Tráfego Que Vende</h3>
                         <p class="ebook-desc">Domine Facebook e Google Ads e crie campanhas pagas que geram retorno consistente e escalável.</p>
                         <div class="ebook-price"><span class="old">De R$ 47,00</span><span class="now">R$ 12,99</span></div>
-                        <a href="https://pay.hotmart.com/D106894870O" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
+                        <a href="https://pay.hotmart.com/D106894870O?utm_source=kodaros_site&utm_medium=site&utm_campaign=ebooks_modal" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
                     </div>
                 </article>
 
                 <!-- Clássico 3 -->
                 <article class="ebook-card" data-class="classicos">
-                    <div class="ebook-cover"><img src="livro2.png" alt="Venda Mais Hoje"></div>
+                    <div class="ebook-cover"><img src="livro2.png" alt="Venda Mais Hoje" width="270" height="360" loading="lazy"></div>
                     <div class="ebook-body">
                         <span class="ebook-badge">Clássico</span>
                         <h3 class="ebook-title">Venda Mais Hoje</h3>
                         <p class="ebook-desc">Marketing e vendas diretos, sem enrolação: táticas práticas para aumentar suas vendas imediatamente.</p>
                         <div class="ebook-price"><span class="old">De R$ 47,00</span><span class="now">R$ 12,99</span></div>
-                        <a href="https://pay.hotmart.com/R106895345D" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
+                        <a href="https://pay.hotmart.com/R106895345D?utm_source=kodaros_site&utm_medium=site&utm_campaign=ebooks_modal" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
                     </div>
                 </article>
 
                 <!-- Clássico 4 -->
                 <article class="ebook-card" data-class="classicos">
-                    <div class="ebook-cover"><img src="livro os 10 pilares da gestão empresarial.png" alt="Os 10 Pilares da Gestão Empresarial"></div>
+                    <div class="ebook-cover"><img src="livro os 10 pilares da gestão empresarial.png" alt="Os 10 Pilares da Gestão Empresarial" width="270" height="360" loading="lazy"></div>
                     <div class="ebook-body">
                         <span class="ebook-badge">Clássico</span>
                         <h3 class="ebook-title">Os 10 Pilares da Gestão Empresarial</h3>
                         <p class="ebook-desc">10 pilares para organizar e crescer sua empresa com controle e decisões baseadas em dados.</p>
                         <div class="ebook-price"><span class="old">De R$ 67,00</span><span class="now">R$ 22,99</span></div>
-                        <a href="https://pay.hotmart.com/S107016677T" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
+                        <a href="https://pay.hotmart.com/S107016677T?utm_source=kodaros_site&utm_medium=site&utm_campaign=ebooks_modal" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
                     </div>
                 </article>
 
                 <!-- Clássico 5 -->
                 <article class="ebook-card" data-class="classicos">
-                    <div class="ebook-cover"><img src="livro os 10 pilares do controle financeiro.png" alt="Os 10 Pilares do Controle Financeiro"></div>
+                    <div class="ebook-cover"><img src="livro os 10 pilares do controle financeiro.png" alt="Os 10 Pilares do Controle Financeiro" width="270" height="360" loading="lazy"></div>
                     <div class="ebook-body">
                         <span class="ebook-badge">Clássico</span>
                         <h3 class="ebook-title">Os 10 Pilares do Controle Financeiro</h3>
                         <p class="ebook-desc">Organize o fluxo de caixa, a formação de preços e reduza custos para lucrar com previsibilidade.</p>
                         <div class="ebook-price"><span class="old">De R$ 67,00</span><span class="now">R$ 22,99</span></div>
-                        <a href="https://pay.hotmart.com/E107016796K" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
+                        <a href="https://pay.hotmart.com/E107016796K?utm_source=kodaros_site&utm_medium=site&utm_campaign=ebooks_modal" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
                     </div>
                 </article>
 
                 <!-- Clássico 6 -->
                 <article class="ebook-card" data-class="classicos">
-                    <div class="ebook-cover"><img src="livro use seu site para escalar sua empresa.png" alt="Use Seu Site Para Escalar Sua Empresa"></div>
+                    <div class="ebook-cover"><img src="livro use seu site para escalar sua empresa.png" alt="Use Seu Site Para Escalar Sua Empresa" width="270" height="360" loading="lazy"></div>
                     <div class="ebook-body">
                         <span class="ebook-badge">Clássico</span>
                         <h3 class="ebook-title">Use Seu Site Para Escalar Sua Empresa</h3>
                         <p class="ebook-desc">Transforme seu site em máquina de vendas com SEO, captura de leads e automação.</p>
                         <div class="ebook-price"><span class="old">De R$ 67,00</span><span class="now">R$ 22,99</span></div>
-                        <a href="https://pay.hotmart.com/Y107016734X" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
+                        <a href="https://pay.hotmart.com/Y107016734X?utm_source=kodaros_site&utm_medium=site&utm_campaign=ebooks_modal" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
                     </div>
                 </article>
 
                 <!-- Clássico 7 -->
                 <article class="ebook-card" data-class="classicos">
-                    <div class="ebook-cover"><img src="livro transforme reclamações em vendas.png" alt="Transforme Reclamações em Vendas"></div>
+                    <div class="ebook-cover"><img src="livro transforme reclamações em vendas.png" alt="Transforme Reclamações em Vendas" width="270" height="360" loading="lazy"></div>
                     <div class="ebook-body">
                         <span class="ebook-badge">Clássico</span>
                         <h3 class="ebook-title">Transforme Reclamações em Vendas</h3>
                         <p class="ebook-desc">O método para virar reclamações em fidelização e construir uma cultura centrada no cliente.</p>
                         <div class="ebook-price"><span class="old">De R$ 67,00</span><span class="now">R$ 22,99</span></div>
-                        <a href="https://pay.hotmart.com/G107016779V" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
+                        <a href="https://pay.hotmart.com/G107016779V?utm_source=kodaros_site&utm_medium=site&utm_campaign=ebooks_modal" target="_blank" rel="noopener" class="btn btn-primary ebook-cta">Comprar</a>
                     </div>
                 </article>
 
                 <!-- Avançado: Arquitetura de Aquisição (redireciona para pagina de vendas separada) -->
                 <article class="ebook-card" data-class="avancado">
-                    <div class="ebook-cover"><img src="arquitetura-capa.png" alt="Arquitetura de Aquisição"></div>
+                    <div class="ebook-cover"><img src="arquitetura-capa.png" alt="Arquitetura de Aquisição" width="270" height="360" loading="lazy"></div>
                     <div class="ebook-body">
                         <span class="ebook-badge">Avançado</span>
                         <h3 class="ebook-title">Arquitetura de Aquisição</h3>
@@ -529,6 +577,7 @@
                             <li><a href="#sobre">Sobre</a></li>
                             <li><a href="#depoimentos">Depoimentos</a></li>
                             <li><a href="#contato">Contato</a></li>
+                            <li><a href="https://kelvinoliveiracode.github.io/kodarosferramentas/" target="_blank" rel="noopener">Ferramentas</a></li>
                         </ul>
                     </div>
                     <div class="footer-col">
@@ -536,19 +585,21 @@
                         <ul>
                             <li><a href="privacidade.html">Política de Privacidade</a></li>
                             <li><a href="termos.html">Termos de Uso</a></li>
+                            <li><a href="sitemap.xml">Sitemap</a></li>
                         </ul>
                     </div>
                     <div class="footer-col">
                         <h4>Redes Sociais</h4>
                         <ul>
                             <li><a href="https://www.instagram.com/kodaros01" target="_blank" rel="noopener">Instagram</a></li>
+                            <li><a href="mailto:kodaros01@gmail.com">E-mail</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="footer-separator"></div>
             <div class="footer-bottom">
-                <p>© 2026 KODAROS. Todos os direitos reservados.</p>
+                <p>© <span id="footer-year">2026</span> KODAROS. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
