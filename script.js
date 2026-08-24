@@ -151,11 +151,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function spawnShootingStar() {
+            const sx = rand(0, width);
+            const sy = rand(0, height);
+            const dir = Math.random() * Math.PI * 2;
+            const spd = rand(5, 9);
             shootingStars.push({
-                x: rand(width * 0.1, width * 0.9),
-                y: rand(0, height * 0.35),
-                vx: rand(3.5, 6.5),
-                vy: rand(2.4, 4.2),
+                x: sx,
+                y: sy,
+                vx: Math.cos(dir) * spd,
+                vy: Math.sin(dir) * spd,
                 life: 1,
                 decay: rand(0.008, 0.016),
                 length: rand(60, 130)
