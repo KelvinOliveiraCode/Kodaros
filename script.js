@@ -10,20 +10,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ========================================
-    // MÓDULO: GALÁXIA — FUNDO ANIMADO
-    // Estrelas com brilho pulsante, nebulosas coloridas,
-    // espiral galáctica girando lentamente e estrelas cadentes.
+    // MÓDULO: FUNDO SUTIL — empresarial (substitui galáxia neon)
+    // Apenas estrelas fixas muito sutis + 1 nebulosa atrás do hero
     // ========================================
     (function initGalaxy() {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        // desabilita em páginas legais para LCP
         if (document.body.dataset.noGalaxy === '1') return;
         const canvas = document.getElementById('particle-canvas');
         if (!canvas) return;
-        // reduz custo em mobile com DPR alto
+        canvas.style.opacity = '0.22';
         const isHighDprMobile = window.matchMedia('(pointer: coarse)').matches && (window.devicePixelRatio || 1) > 1.5;
         if (isHighDprMobile && window.innerWidth < 768) {
-            canvas.style.opacity = '0.7';
+            canvas.style.opacity = '0.12';
         }
 
         const ctx = canvas.getContext('2d');
@@ -34,12 +32,12 @@ document.addEventListener('DOMContentLoaded', function() {
         let nebulas = [];
         let shootingStars = [];
         let time = 0;
-        let nextShootingStar = 400;
+        let nextShootingStar = 99999;
         let animId = null;
 
         const galaxyCenter = { x: 0.72, y: 0.30 };
         const mouse = { x: 0, y: 0, tx: 0, ty: 0, cx: 0, cy: 0 };
-        const palette = ['#ffffff', '#c7d2fe', '#a5b4fc', '#bfdbfe', '#f0abfc', '#fde68a'];
+        const palette = ['#E6E8EE', '#9AA3B8', '#C5A46A'];
 
         function rand(min, max) {
             return min + Math.random() * (max - min);
@@ -91,10 +89,9 @@ document.addEventListener('DOMContentLoaded', function() {
         function createNebulas() {
             nebulas = [];
             const defs = [
-                { color: '124, 58, 237', alpha: 0.15 },
-                { color: '34, 211, 238', alpha: 0.10 },
-                { color: '236, 72, 153', alpha: 0.10 },
-                { color: '99, 102, 241', alpha: 0.11 }
+                { color: '59, 91, 254', alpha: 0.05 },
+                { color: '197, 164, 106', alpha: 0.03 },
+                { color: '59, 91, 254', alpha: 0.04 }
             ];
             const count = 6;
             for (let i = 0; i < count; i++) {
@@ -442,36 +439,7 @@ document.addEventListener('DOMContentLoaded', function() {
         animateHeroParallax();
     })();
 
-    // ========================================
-    // MÓDULO: 3D TILT EFFECT
-    // ========================================
-    (function initTilt() {
-        if (isTouch) return;
-        const tiltElements = document.querySelectorAll('[data-tilt]');
-
-        tiltElements.forEach(el => {
-            el.addEventListener('mousemove', (e) => {
-                const rect = el.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = (y - centerY) / centerY * -8;
-                const rotateY = (x - centerX) / centerX * 8;
-
-                el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`;
-            });
-
-            el.addEventListener('mouseleave', () => {
-                el.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
-                el.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
-            });
-
-            el.addEventListener('mouseenter', () => {
-                el.style.transition = 'transform 0.1s ease';
-            });
-        });
-    })();
+    // 3D tilt removido — empresarial não usa inclinação 3D (gatilho IA)
 
     // ========================================
     // MÓDULO: NAVBAR ACTIVE LINKS
@@ -511,85 +479,9 @@ document.addEventListener('DOMContentLoaded', function() {
         setActiveLink();
     })();
 
-    // ========================================
-    // MÓDULO: MAGNETIC BUTTONS
-    // ========================================
-    (function initMagnetic() {
-        if (isTouch) return;
-        const magneticBtns = document.querySelectorAll('.btn, .nav-cta');
+    // magnetic buttons removido — mantém botão estático empresarial
 
-        magneticBtns.forEach(btn => {
-            btn.addEventListener('mousemove', (e) => {
-                const rect = btn.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
-            });
-
-            btn.addEventListener('mouseleave', () => {
-                btn.style.transform = 'translate(0, 0)';
-                btn.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease, box-shadow 0.3s ease';
-            });
-
-            btn.addEventListener('mouseenter', () => {
-                btn.style.transition = 'transform 0.1s ease, background 0.3s ease, box-shadow 0.3s ease';
-            });
-        });
-    })();
-
-    // ========================================
-    // MÓDULO: CURSOR GLOW
-    // ========================================
-    (function initCursorGlow() {
-        if (isTouch) return;
-
-        const cursorGlow = document.createElement('div');
-        cursorGlow.className = 'cursor-glow';
-        cursorGlow.style.cssText = `
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.07), transparent 70%);
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s ease;
-            opacity: 0;
-        `;
-        document.body.appendChild(cursorGlow);
-
-        let glowX = 0, glowY = 0;
-        let currentGlowX = 0, currentGlowY = 0;
-        let mouseInWindow = false;
-
-        document.addEventListener('mousemove', (e) => {
-            glowX = e.clientX;
-            glowY = e.clientY;
-            mouseInWindow = true;
-            cursorGlow.style.opacity = '1';
-        });
-
-        document.addEventListener('mouseleave', () => {
-            mouseInWindow = false;
-            cursorGlow.style.opacity = '0';
-        });
-
-        document.addEventListener('mouseenter', () => {
-            mouseInWindow = true;
-        });
-
-        function animateGlow() {
-            if (isTabActive && mouseInWindow) {
-                currentGlowX += (glowX - currentGlowX) * 0.08;
-                currentGlowY += (glowY - currentGlowY) * 0.08;
-                cursorGlow.style.left = currentGlowX + 'px';
-                cursorGlow.style.top = currentGlowY + 'px';
-            }
-            requestAnimationFrame(animateGlow);
-        }
-        animateGlow();
-    })();
+    // cursor glow removido — gatilho IA, sem valor empresarial
 });
 
 /* ===== FILTRO DE CLASSES — CATÁLOGO DE E-BOOKS ===== */
